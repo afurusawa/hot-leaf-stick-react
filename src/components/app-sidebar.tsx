@@ -33,8 +33,8 @@ const items = [
     icon: Home,
   },
   {
-    title: "Palate",
-    url: "#",
+    title: "Collection",
+    url: "/collection",
     icon: Inbox,
   },
   {
