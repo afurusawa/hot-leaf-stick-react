@@ -1,8 +1,17 @@
-import { ArrowUpCircleIcon, Calendar, ChevronDown, ChevronUp, Home, Inbox, PlusCircleIcon, Search, Settings, User2 } from "lucide-react"
-
+import {
+  Brain,
+  ChevronDown,
+  Cigarette,
+  Heart,
+  HelpCircleIcon,
+  LayoutDashboardIcon,
+  ListIcon,
+  SettingsIcon,
+  ShoppingBag,
+  Trophy,
+} from "lucide-react";
 import {
   Sidebar,
-  SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
@@ -11,79 +20,75 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@radix-ui/react-collapsible"
+} from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger
+} from "@/components/ui/collapsible";
+
 import { NavUser } from "./nav-user"
+import { NavSecondary } from "./nav-secondary";
+import { NavMain } from "./nav-main";
 
 
 const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "",
   },
 };
 
-// Menu items.
-const items = [
+const navMain = [
   {
-    title: "Home",
-    url: "/home",
-    icon: Home,
+    title: "Dashboard",
+    url: "/",
+    icon: LayoutDashboardIcon,
   },
   {
     title: "Collection",
-    url: "/collection",
-    icon: Inbox,
+    url: "/collection/",
+    icon: ListIcon,
   },
   {
-    title: "Discover",
+    title: "Palate (WIP)",
     url: "#",
-    icon: Calendar,
+    icon: Brain,
   },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-]
+];
 
-const discoverItems = [
+const navCommunity = [
   {
     title: "Top Rated",
-    url: "/home",
-    icon: Home,
+    url: "#",
+    icon: Trophy,
   },
   {
     title: "Recommendations",
     url: "#",
-    icon: Inbox,
+    icon: Heart,
   },
   {
     title: "Discover",
     url: "#",
-    icon: Calendar,
+    icon: ShoppingBag,
   },
 ]
 
-const supportItems = [
+const navSecondary = [
   {
-    title: "Beginners Guide",
+    title: "Settings",
     url: "#",
-    icon: Home,
+    icon: SettingsIcon,
   },
   {
     title: "Rating Philosophy",
     url: "#",
-    icon: Inbox,
+    icon: HelpCircleIcon,
   },
-]
+];
+
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -96,8 +101,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
-                <ArrowUpCircleIcon className="h-5 w-5" />
+              <a href="/">
+                <Cigarette className="h-5 w-5" />
                 <span className="text-base font-semibold">HOT LEAF STICK</span>
               </a>
             </SidebarMenuButton>
@@ -105,104 +110,41 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
 
-      <SidebarContent>
+      <NavMain items={navMain} />
 
-
+      <Collapsible defaultOpen className="group/collapsible">
         <SidebarGroup>
-          <SidebarGroupContent className="flex flex-col gap-2">
-            <SidebarMenu>
-              <SidebarMenuItem className="flex items-center gap-2">
-                <SidebarMenuButton
-                  tooltip="Quick Create"
-                  className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
-                >
-                  <PlusCircleIcon />
-                  <span>Add Experience</span>
-                </SidebarMenuButton>
-
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
+          <SidebarGroupLabel asChild>
+            <CollapsibleTrigger>
+              Community
+              <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+            </CollapsibleTrigger>
+          </SidebarGroupLabel>
+          <CollapsibleContent>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {navCommunity.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <a href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </CollapsibleContent>
         </SidebarGroup>
+      </Collapsible>
 
-        <SidebarGroup>
-          <SidebarGroupLabel>Home</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        <Collapsible defaultOpen className="group/collapsible">
-          <SidebarGroup>
-            <SidebarGroupLabel asChild>
-              <CollapsibleTrigger>
-                Discover
-                <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              </CollapsibleTrigger>
-            </SidebarGroupLabel>
-            <CollapsibleContent>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {discoverItems.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild>
-                        <a href={item.url}>
-                          <item.icon />
-                          <span>{item.title}</span>
-                        </a>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </CollapsibleContent>
-          </SidebarGroup>
-        </Collapsible>
-
-        <Collapsible defaultOpen className="group/collapsible">
-          <SidebarGroup>
-            <SidebarGroupLabel asChild>
-              <CollapsibleTrigger>
-                Support
-                <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
-              </CollapsibleTrigger>
-            </SidebarGroupLabel>
-            <CollapsibleContent>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {supportItems.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild>
-                        <a href={item.url}>
-                          <item.icon />
-                          <span>{item.title}</span>
-                        </a>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </CollapsibleContent>
-          </SidebarGroup>
-        </Collapsible>
-
-      </SidebarContent>
+      <NavSecondary items={navSecondary} className="mt-auto" />
 
       {/* Footer */}
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
-    </Sidebar>
+    </Sidebar >
   )
 }

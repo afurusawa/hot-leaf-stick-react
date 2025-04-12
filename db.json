@@ -1,1 +1,16 @@
-{}
+{
+  "collection": [
+    {
+      "id": "503f",
+      "name": "serie v",
+      "brand": "oliva",
+      "price": 4
+    },
+    {
+      "id": "18c5",
+      "name": "undercrown 10",
+      "brand": "drew estate",
+      "price": 5
+    }
+  ]
+}

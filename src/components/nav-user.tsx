@@ -1,11 +1,4 @@
-import {
-  IconCreditCard,
-  IconDotsVertical,
-  IconLogout,
-  IconNotification,
-  IconUserCircle,
-} from "@tabler/icons-react"
-
+import { MoreVertical, LogOut, Bell, User } from "lucide-react";
 import {
   Avatar,
   AvatarFallback,
@@ -57,7 +50,7 @@ export function NavUser({
                   {user.email}
                 </span>
               </div>
-              <IconDotsVertical className="ml-auto size-4" />
+              <MoreVertical className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -83,17 +76,17 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <IconUserCircle />
+                <User />
                 Account
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <IconNotification />
+                <LogOut />
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <IconLogout />
+              <Bell />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
