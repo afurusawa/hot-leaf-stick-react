@@ -1,0 +1,37 @@
+//  Used to display collection entires on the collection page
+export interface CollectionEntry {
+  id: string;
+  cigarId: string;
+  brandId: string;
+  quantity: number;
+  vitola: Vitola;
+  storageDate: string;
+  cigar: Cigar;
+  brand: Brand;
+}
+
+export interface CollectionEntryForm {
+  cigarName: string;
+  brandName: string;
+  quantity: number;
+  vitola: Vitola;
+  storageDate: Date;
+}
+
+export interface Vitola {
+  name: string;
+  length: number;
+  ringGauge: number;
+}
+
+export interface Brand {
+  id: string;
+  name: string;
+}
+
+export interface Cigar {
+  id: string;
+  name: string;
+  brandId: string;
+  vitola: Vitola;
+}

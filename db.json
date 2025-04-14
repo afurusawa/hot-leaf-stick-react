@@ -2,15 +2,144 @@
   "collection": [
     {
       "id": "503f",
-      "name": "serie v",
-      "brand": "oliva",
-      "price": 4
+      "cigarId": "4",
+      "quantity": 10,
+      "vitola": {
+        "name": "lancero",
+        "length": 7.5,
+        "ringGauge": 38
+      },
+      "storageDate": "2023-10-01"
     },
     {
-      "id": "18c5",
+      "id": "503g",
+      "cigarId": "5",
+      "quantity": 6,
+      "vitola": {
+        "name": "churchill",
+        "length": 7,
+        "ringGauge": 50
+      },
+      "storageDate": "2025-01-15"
+    },
+    {
+      "id": "503h",
+      "cigarId": "7",
+      "quantity": 11,
+      "vitola": {
+        "name": "toro",
+        "length": 6,
+        "ringGauge": 52
+      },
+      "storageDate": "2025-03-10"
+    }
+  ],
+  "brands": [
+    {
+      "id": "1",
+      "name": "drew estate"
+    },
+    {
+      "id": "2",
+      "name": "oliva"
+    },
+    {
+      "id": "3",
+      "name": "dunbarton tobacco and trust"
+    },
+    {
+      "id": "4",
+      "name": "sanj patel"
+    },
+    {
+      "id": "5",
+      "name": "foundation cigar company"
+    },
+    {
+      "id": "6",
+      "name": "crowned heads"
+    }
+  ],
+  "cigars": [
+    {
+      "id": "1",
+      "name": "charter oak habano",
+      "brandId": "5"
+    },
+    {
+      "id": "2",
+      "name": "charter oak maduro",
+      "brandId": "5"
+    },
+    {
+      "id": "3",
+      "name": "charter oak connecticut",
+      "brandId": "5"
+    },
+    {
+      "id": "4",
+      "name": "gas station sushi habano",
+      "brandId": "4",
+      "vitolas": [
+        {
+          "name": "lancero",
+          "length": 7.5,
+          "ringGauge": 38
+        },
+        {
+          "name": "toro",
+          "length": 6,
+          "ringGauge": 52
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "name": "gas station sushi maduro",
+      "brandId": "4"
+    },
+    {
+      "id": "6",
+      "name": "sp1014 black",
+      "brandId": "4"
+    },
+    {
+      "id": "7",
       "name": "undercrown 10",
-      "brand": "drew estate",
-      "price": 5
+      "brandId": "1"
+    },
+    {
+      "id": "8",
+      "name": "mil dias maduro",
+      "brandId": "3",
+      "vitolas": [
+        {
+          "name": "edmundo",
+          "length": 5.38,
+          "ringGauge": 52
+        },
+        {
+          "name": "double robusto",
+          "length": 6.3,
+          "ringGauge": 50
+        },
+        {
+          "name": "topes",
+          "length": 4.9,
+          "ringGauge": 56
+        },
+        {
+          "name": "sublime",
+          "length": 6,
+          "ringGauge": 54
+        },
+        {
+          "name": "belicoso finos 2023",
+          "length": 5.5,
+          "ringGauge": 52,
+          "isLimited": true
+        }
+      ]
     }
   ]
 }
