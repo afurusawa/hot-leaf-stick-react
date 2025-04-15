@@ -15,6 +15,7 @@ import { queryClient } from "@/lib/queryClient";
 import { cigarQueryKeys, collectionQueryKeys, getBrands, getCollection } from "@/features/collection/collectionApi";
 import { Brand, CollectionEntry } from "@/features/collection/collectionEntry";
 import { capitalize, getRelativeDateString } from "@/lib/utils";
+import { Plus } from "lucide-react";
 
 interface LoaderData {
   entries: CollectionEntry[];
@@ -51,13 +52,13 @@ function Collection() {
       <Card className="w-[300px] h-[250px] flex flex-col justify-between">
         <CardHeader>
           <CardTitle className="flex items-start justify-between">
-            <p>{capitalize(`${entry.cigar.name} ${entry.vitola.name}`)}</p>
-            <Badge className="ml-2">
-              {entry.vitola.length}x{entry.vitola.ringGauge}
-            </Badge>
+            {capitalize(`${entry.cigar.name} ${entry.vitola.name}`)}
           </CardTitle>
           <CardDescription>
             {capitalize(brandName || "")}
+            <Badge variant="outline" className="ml-4">
+              {entry.vitola.length}x{entry.vitola.ringGauge}
+            </Badge>
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -75,21 +76,21 @@ function Collection() {
 
   return (
     <div className="flex flex-wrap gap-4">
-      <Card className="w-[300px] h-[250px] flex flex-col justify-between">
+      <Card className="w-[300px] h-[250px] flex flex-col justify-between bg-transparent border-gray-500">
         <CardHeader>
           <CardTitle>
-            <h1>Add Cigars</h1>
+            Add Cigars
           </CardTitle>
           <CardDescription>
             Add new cigars to your collection
           </CardDescription>
         </CardHeader>
-        <CardContent>
-
+        <CardContent className="flex items-center justify-center">
+          {/* <Plus className="w-16 h-16 opacity-50" /> */}
         </CardContent>
         <CardFooter className="flex items-end justify-between">
           <Link to="/collection/addCigar" className="w-full">
-            <Button variant="secondary" size="lg" className="w-full">
+            <Button variant="default" size="lg" className="w-full">
               Add
             </Button>
           </Link>
