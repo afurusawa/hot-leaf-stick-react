@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Delete } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -55,9 +55,21 @@ export function SearchSelect({
     <FormField
       control={control}
       name={name}
-      render={({ field, formState }) => (
+      render={({ field }) => (
         <FormItem className={cn("py-4 gap-2", className)}>
-          <FormLabel>{label}</FormLabel>
+          <div className="flex justify-between">
+            <FormLabel>{label}</FormLabel>
+            <a
+              className="text-sm underline cursor-pointer"
+              onClick={() => {
+                field.onChange("");
+                setSearchQuery("");
+                setOpen(false);
+              }}
+            >
+              CLEAR
+            </a>
+          </div>
           <div className="flex items-center">
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
@@ -121,10 +133,10 @@ export function SearchSelect({
                 </Command>
               </PopoverContent>
             </Popover>
-            <Button
-              variant="outline"
+            {/* <Button
+              variant="ghost"
               size="icon"
-              className="ml-2"
+              className="ml-0"
               onClick={() => {
                 field.onChange("");
                 setSearchQuery("");
@@ -132,8 +144,8 @@ export function SearchSelect({
               }}
               disabled={disabled}
             >
-              X
-            </Button>
+              <Delete />
+            </Button> */}
           </div>
           <FormMessage />
         </FormItem>

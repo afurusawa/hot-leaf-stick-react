@@ -4,10 +4,14 @@ export interface CollectionEntry {
   cigarId: string;
   brandId: string;
   quantity: number;
-  vitola: Vitola;
   storageDate: string;
-  cigar: Cigar;
-  brand: Brand;
+  custom?: {
+    cigarName: string;
+    brandName: string;
+    vitola: Vitola;
+  },
+  cigar?: Cigar;
+  brand?: Brand;
 }
 
 export interface CollectionEntryForm {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { createFileRoute, useLoaderData, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
@@ -17,23 +17,28 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { queryClient } from "@/lib/queryClient";
-import { cigarQueryKeys, getBrands, useAddCigar } from "../../features/collection/collectionApi";
-import { CollectionEntry } from "@/features/collection/collectionEntry";
-import { DatePicker } from "@/features/collection/date-picker";
-import { NumberInput } from "@/features/collection/number-input";
+import { cigarQueryKeys, getBrands, getCigarByName, useAddCigar } from "../../features/collection/collectionApi";
 import { SearchSelect } from "@/features/collection/search-select";
+import { DatePickerInput } from "@/features/collection/date-picker-input";
+import { CollectionEntry } from "@/features/collection/collectionEntry";
 
 // Define the form schema with Zod for validation
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   brandName: z.string().min(1, "Brand is required"),
-  quantity: z.number().min(1, "Quantity is required"),
-  storageDate: z.date().optional(),
   vitola: z.object({
-    name: z.string().optional(),
-    length: z.number().optional(),
-    ringGauge: z.number().optional(),
+    name: z.string().min(1, "Name is required"),
+    length: z.coerce
+      .number({ invalid_type_error: 'Must be a number' }),
+    ringGauge: z.coerce
+      .number({ invalid_type_error: 'Must be a number' })
+      .int('Must be a whole number'),
   }),
+  quantity: z.coerce
+    .number({ invalid_type_error: 'Price must be a number' })
+    .int('Must be a whole number')
+    .min(1, 'Must add at least one cigar'),
+  storageDate: z.date({ message: '' }),
 });
 
 // Infer the TypeScript type from the schema
@@ -63,13 +68,13 @@ function AddCigar() {
     defaultValues: {
       name: "fiat lux",
       brandName: "luciano",
-      quantity: 0,
       vitola: {
         name: "genius",
         length: 5.5,
         ringGauge: 52,
       },
-      storageDate: (new Date())
+      quantity: 1,
+      storageDate: new Date()
     },
   });
 
@@ -77,35 +82,42 @@ function AddCigar() {
   const navigate = useNavigate();
 
   // Handle form submission
-  const onSubmit = (data: CollectionEntryForm) => {
+  const onSubmit = async (data: CollectionEntryForm) => {
 
     console.log(data);
-    // What if the brand doesn't exist in the db?
+    // If brand doesn't exist, set brandId to null
+
+    const brand = brands.find((b) => b.name.toLowerCase() === data.brandName.toLowerCase()) || null;
 
     // Get cigars with the same name
+    const [cigar = null] = await getCigarByName(data.name);
 
     // // Transform data if needed
-    // const entry = {
-    //   cigarId: "unknown",
-    //   brandId: "unknown",
-    //   quantity: data.quantity,
-    //   vitola: {
-    //     name: data.vitola.name,
-    //     length: data.vitola.length,
-    //     ringGauge: data.vitola.ringGauge,
-    //   },
-    //   storageDate: Date().toString(),
-    // } as CollectionEntry;
+    const entry = {
+      cigarId: cigar?.id || 0,
+      brandId: brand?.id || 0,
+      quantity: data.quantity,
+      storageDate: data.storageDate.toISOString(),
+      custom: {
+        cigarName: data.name,
+        brandName: data.brandName,
+        vitola: {
+          name: data.vitola.name,
+          length: data.vitola.length,
+          ringGauge: data.vitola.ringGauge,
+        },
+      }
+    } as CollectionEntry;
 
-    // mutate(entry, {
-    //   onSuccess: () => {
-    //     form.reset(); // Clear form
-    //     navigate({ to: "/collection" }); // Navigate to CollectionPage
-    //   },
-    //   onError: (error) => {
-    //     console.error("Failed to add cigar:", error);
-    //   },
-    // });
+    mutate(entry, {
+      onSuccess: () => {
+        form.reset(); // Clear form
+        navigate({ to: "/collection" }); // Navigate to CollectionPage
+      },
+      onError: (error) => {
+        console.error("Failed to add cigar:", error);
+      },
+    });
   };
 
   return (
@@ -128,6 +140,7 @@ function AddCigar() {
             )}
           />
 
+          {/* Brand */}
           <SearchSelect
             control={form.control}
             name="brandName"
@@ -151,7 +164,10 @@ function AddCigar() {
             )}
           />
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          {/* Size */}
+          <div className="flex flex-col sm:flex-row py-4 gap-4">
+
+            {/* Length */}
             <FormField
               control={form.control}
               name="vitola.length"
@@ -159,15 +175,26 @@ function AddCigar() {
                 <FormItem className="flex-1">
                   <FormLabel>Length (in)</FormLabel>
                   <FormControl>
-                    <NumberInput
-                      value={field.value ?? ""}
-                      onChange={(value) =>
-                        field.onChange(value === "" ? undefined : parseFloat(value))
-                      }
+                    <Input
+                      type="number"
+                      inputMode="numeric"
+                      {...field}
+                      value={field.value === 0 ? '' : field.value}
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        value = value.replace(/^0+/, '') || '';
+                        field.onChange(value);
+                      }}
+                      onKeyDown={(e) => {
+                        // Block negative numbers
+                        if (e.key === ',' || e.key === '-') {
+                          e.preventDefault();
+                        }
+                      }}
                       disabled={field.disabled}
-                      placeholder="e.g., 4.5, 5, 5.38"
+                      placeholder="4.5, 5, 5.38, etc."
                       step="0.01"
-                      className="w-full"
+                      min="0"
                     />
                   </FormControl>
                   <FormMessage />
@@ -175,6 +202,7 @@ function AddCigar() {
               )}
             />
 
+            {/* Ring Gauge */}
             <FormField
               control={form.control}
               name="vitola.ringGauge"
@@ -182,15 +210,26 @@ function AddCigar() {
                 <FormItem className="flex-1">
                   <FormLabel>Ring Gauge</FormLabel>
                   <FormControl>
-                    <NumberInput
-                      value={field.value ?? ""}
-                      onChange={(value) =>
-                        field.onChange(value === "" ? undefined : parseInt(value))
-                      }
+                    <Input
+                      type="number"
+                      inputMode="numeric"
+                      {...field}
+                      value={field.value === 0 ? '' : field.value}
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        value = value.replace(/^0+/, '') || '';
+                        field.onChange(value);
+                      }}
+                      onKeyDown={(e) => {
+                        // Block decimal point, comma, and negative numbers
+                        if (e.key === '.' || e.key === ',' || e.key === '-') {
+                          e.preventDefault();
+                        }
+                      }}
                       disabled={field.disabled}
-                      placeholder="e.g., 38, 50, 52"
+                      placeholder="38, 50, 52, etc."
                       step="1"
-                      className="w-full"
+                      min="0"
                     />
                   </FormControl>
                   <FormMessage />
@@ -207,18 +246,28 @@ function AddCigar() {
               <FormItem className="py-4 gap-2">
                 <FormLabel>Quantity</FormLabel>
                 <FormControl>
-                  <NumberInput
-                    value={field.value ?? ""}
-                    onChange={(value) =>
-                      field.onChange(value === "" ? undefined : Number(value))
-                    }
+                  <Input
+                    type="number"
+                    inputMode="numeric"
+                    {...field}
+                    value={field.value === 0 ? '' : field.value}
+                    onChange={(e) => {
+                      let value = e.target.value;
+                      value = value.replace(/^0+/, '') || '';
+                      field.onChange(value);
+                    }}
+                    onKeyDown={(e) => {
+                      // Block decimal point, comma, and negative numbers
+                      if (e.key === '.' || e.key === ',' || e.key === '-') {
+                        e.preventDefault();
+                      }
+                    }}
                     disabled={field.disabled}
                     placeholder="Enter quantity"
+                    step="1"
+                    min="0"
                   />
                 </FormControl>
-                <FormDescription>
-                  Enter the number of cigars.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -229,28 +278,24 @@ function AddCigar() {
             control={form.control}
             name="storageDate"
             render={({ field }) => (
-              <FormItem className="py-4 gap-2">
+              <FormItem>
                 <FormLabel>Storage Date</FormLabel>
                 <FormControl>
-                  <DatePicker
+                  <DatePickerInput
                     value={field.value}
                     onChange={field.onChange}
-                    dateFormat="MM/dd/yyyy"
-                    placeholder="Select a date"
-                    disabled={field.disabled}
+                    id="storage-date"
+                    className=""
                   />
                 </FormControl>
-                <FormDescription>
-                  Select the date received this cigar.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
 
           <div className="gap-8 py-8">
-            <Button type="submit" disabled={isPending} className="w-full">
-              {isPending ? "Adding..." : "Add Cigar"}
+            <Button type="submit" disabled={isPending} className="w-full text-md uppercase">
+              {isPending ? "Adding..." : "Add To Collection"}
             </Button>
           </div>
         </form>

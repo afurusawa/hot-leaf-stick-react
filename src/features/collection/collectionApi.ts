@@ -1,18 +1,18 @@
 // src/api/cigarApi.ts
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { CollectionEntry } from './collectionEntry';
+import { Cigar, CollectionEntry } from './collectionEntry';
 
 const API_URL = 'http://localhost:3001';
 
 // API CALLS
 export const getCollection = async () => {
-  const response = await axios.get<CollectionEntry[]>(`${API_URL}/collection?_embed=cigar`);
+  const response = await axios.get<CollectionEntry[]>(`${API_URL}/collection?_embed=cigar&_embed=brand`);
   return response.data;
 };
 
 export const getBrands = async () => {
-  const response = await axios.get<{ id: string, name: string }[]>(`${API_URL}/brands`);
+  const response = await axios.get<{ id: string, name: string }[]>(`${API_URL}/brands?_sort=name`);
   return response.data;
 };
 
@@ -22,12 +22,17 @@ export const getBrandById = async (id: string) => {
 };
 
 export const getCigars = async () => {
-  const response = await axios.get<CollectionEntry[]>(`${API_URL}/cigars`);
+  const response = await axios.get<Cigar[]>(`${API_URL}/cigars`);
   return response.data;
 };
 
 export const getCigarById = async (id: string) => {
-  const response = await axios.get<CollectionEntry>(`${API_URL}/cigars/${id}`);
+  const response = await axios.get<Cigar>(`${API_URL}/cigars/${id}`);
+  return response.data;
+};
+
+export const getCigarByName = async (name: string) => {
+  const response = await axios.get<Cigar[]>(`${API_URL}/cigars?name=${name}`);
   return response.data;
 };
 
@@ -50,7 +55,7 @@ export const useAddCigar = () => {
 
   return useMutation({
     mutationFn: async (entry: CollectionEntry) => {
-      const response = await axios.post(API_URL, entry);
+      const response = await axios.post(`${API_URL}/collection`, entry);
       return response.data;
     },
     onSuccess: () => {

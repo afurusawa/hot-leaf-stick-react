@@ -15,13 +15,12 @@ import { queryClient } from "@/lib/queryClient";
 import { cigarQueryKeys, collectionQueryKeys, getBrands, getCollection } from "@/features/collection/collectionApi";
 import { Brand, CollectionEntry } from "@/features/collection/collectionEntry";
 import { capitalize, getRelativeDateString } from "@/lib/utils";
-import { Plus } from "lucide-react";
+
 
 interface LoaderData {
   entries: CollectionEntry[];
   brands: Brand[];
 }
-
 
 export const Route = createFileRoute("/collection/")({
   component: Collection,
@@ -46,18 +45,18 @@ function Collection() {
 
   const renderCard = (entry: CollectionEntry) => {
 
-    const brandName = brands.find((brand) => brand.id === entry.cigar.brandId)?.name;
+    const brandName = brands.find((brand) => brand.id === entry.cigar?.brandId)?.name;
 
     return (
       <Card className="w-[300px] h-[250px] flex flex-col justify-between">
         <CardHeader>
           <CardTitle className="flex items-start justify-between">
-            {capitalize(`${entry.cigar.name} ${entry.vitola.name}`)}
+            {capitalize(`${entry.cigar?.name} ${entry.custom?.vitola.name}`)}
           </CardTitle>
           <CardDescription>
             {capitalize(brandName || "")}
             <Badge variant="outline" className="ml-4">
-              {entry.vitola.length}x{entry.vitola.ringGauge}
+              {entry.custom?.vitola.length}x{entry.custom?.vitola.ringGauge}
             </Badge>
           </CardDescription>
         </CardHeader>

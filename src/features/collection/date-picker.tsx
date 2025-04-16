@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { useEffect, useState } from 'react';
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
@@ -29,13 +29,12 @@ export function DatePicker({
   dateFormat = "PPP",
   placeholder = "Pick a date",
   className,
-  name,
   disabled,
 }: DatePickerProps) {
-  const [date, setDate] = React.useState<Date | undefined>(value);
+  const [date, setDate] = useState<Date | undefined>(value);
 
   // Sync external value changes
-  React.useEffect(() => {
+  useEffect(() => {
     setDate(value);
   }, [value]);
 
@@ -66,9 +65,18 @@ export function DatePicker({
           mode="single"
           selected={date}
           onSelect={handleSelect}
+          // onSelect={setDate}
+          captionLayout="dropdown-buttons" // Adds year/month dropdowns
+          fromYear={1900} // Set the earliest year
+          toYear={2025} // Set the latest year
           initialFocus
           disabled={disabled}
         />
+        {/* <Calendar
+          mode="single"
+          selected={date}
+          initialFocus
+        /> */}
       </PopoverContent>
     </Popover>
   );
