@@ -14,6 +14,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as CollectionIndexImport } from './routes/collection/index'
 import { Route as CollectionAddCigarImport } from './routes/collection/addCigar'
+import { Route as AdminManageCigarsImport } from './routes/admin/manageCigars'
+import { Route as AdminManageBrandsImport } from './routes/admin/manageBrands'
 
 // Create/Update Routes
 
@@ -35,6 +37,18 @@ const CollectionAddCigarRoute = CollectionAddCigarImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AdminManageCigarsRoute = AdminManageCigarsImport.update({
+  id: '/admin/manageCigars',
+  path: '/admin/manageCigars',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminManageBrandsRoute = AdminManageBrandsImport.update({
+  id: '/admin/manageBrands',
+  path: '/admin/manageBrands',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -44,6 +58,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/manageBrands': {
+      id: '/admin/manageBrands'
+      path: '/admin/manageBrands'
+      fullPath: '/admin/manageBrands'
+      preLoaderRoute: typeof AdminManageBrandsImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/manageCigars': {
+      id: '/admin/manageCigars'
+      path: '/admin/manageCigars'
+      fullPath: '/admin/manageCigars'
+      preLoaderRoute: typeof AdminManageCigarsImport
       parentRoute: typeof rootRoute
     }
     '/collection/addCigar': {
@@ -67,12 +95,16 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin/manageBrands': typeof AdminManageBrandsRoute
+  '/admin/manageCigars': typeof AdminManageCigarsRoute
   '/collection/addCigar': typeof CollectionAddCigarRoute
   '/collection': typeof CollectionIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin/manageBrands': typeof AdminManageBrandsRoute
+  '/admin/manageCigars': typeof AdminManageCigarsRoute
   '/collection/addCigar': typeof CollectionAddCigarRoute
   '/collection': typeof CollectionIndexRoute
 }
@@ -80,27 +112,49 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/admin/manageBrands': typeof AdminManageBrandsRoute
+  '/admin/manageCigars': typeof AdminManageCigarsRoute
   '/collection/addCigar': typeof CollectionAddCigarRoute
   '/collection/': typeof CollectionIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/collection/addCigar' | '/collection'
+  fullPaths:
+    | '/'
+    | '/admin/manageBrands'
+    | '/admin/manageCigars'
+    | '/collection/addCigar'
+    | '/collection'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/collection/addCigar' | '/collection'
-  id: '__root__' | '/' | '/collection/addCigar' | '/collection/'
+  to:
+    | '/'
+    | '/admin/manageBrands'
+    | '/admin/manageCigars'
+    | '/collection/addCigar'
+    | '/collection'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin/manageBrands'
+    | '/admin/manageCigars'
+    | '/collection/addCigar'
+    | '/collection/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminManageBrandsRoute: typeof AdminManageBrandsRoute
+  AdminManageCigarsRoute: typeof AdminManageCigarsRoute
   CollectionAddCigarRoute: typeof CollectionAddCigarRoute
   CollectionIndexRoute: typeof CollectionIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminManageBrandsRoute: AdminManageBrandsRoute,
+  AdminManageCigarsRoute: AdminManageCigarsRoute,
   CollectionAddCigarRoute: CollectionAddCigarRoute,
   CollectionIndexRoute: CollectionIndexRoute,
 }
@@ -116,12 +170,20 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/admin/manageBrands",
+        "/admin/manageCigars",
         "/collection/addCigar",
         "/collection/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/admin/manageBrands": {
+      "filePath": "admin/manageBrands.tsx"
+    },
+    "/admin/manageCigars": {
+      "filePath": "admin/manageCigars.tsx"
     },
     "/collection/addCigar": {
       "filePath": "collection/addCigar.tsx"

@@ -5,7 +5,7 @@ import {
   Heart,
   HelpCircleIcon,
   LayoutDashboardIcon,
-  ListIcon,
+  List,
   SettingsIcon,
   ShoppingBag,
   Trophy,
@@ -49,7 +49,7 @@ const navMain = [
   {
     title: "Collection",
     url: "/collection/",
-    icon: ListIcon,
+    icon: List,
   },
   {
     title: "Palate (WIP)",
@@ -76,6 +76,19 @@ const navCommunity = [
   },
 ]
 
+const navAdmin = [
+  {
+    title: "Brands",
+    url: "/admin/manageBrands",
+    icon: List
+  },
+  {
+    title: "Cigars",
+    url: "/admin/manageCigars",
+    icon: List
+  }
+]
+
 const navSecondary = [
   {
     title: "Settings",
@@ -87,7 +100,13 @@ const navSecondary = [
     url: "#",
     icon: HelpCircleIcon,
   },
+  {
+    title: "About",
+    url: "#",
+    icon: HelpCircleIcon,
+  },
 ];
+
 
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -124,6 +143,33 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarGroupContent>
               <SidebarMenu>
                 {navCommunity.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <a href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </CollapsibleContent>
+        </SidebarGroup>
+      </Collapsible>
+
+      <Collapsible defaultOpen className="group/collapsible">
+        <SidebarGroup>
+          <SidebarGroupLabel asChild>
+            <CollapsibleTrigger>
+              Admin
+              <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+            </CollapsibleTrigger>
+          </SidebarGroupLabel>
+          <CollapsibleContent>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {navAdmin.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <a href={item.url}>

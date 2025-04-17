@@ -3,7 +3,7 @@
     {
       "id": "503f",
       "cigarId": "4",
-      "brandId": "4",
+      "brandId": "1",
       "quantity": 10,
       "storageDate": "2023-10-01",
       "custom": {
@@ -17,7 +17,7 @@
     {
       "id": "503g",
       "cigarId": "5",
-      "brandId": "4",
+      "brandId": "1",
       "quantity": 6,
       "storageDate": "2025-01-15",
       "custom": {
@@ -45,7 +45,7 @@
     {
       "id": "8c16",
       "cigarId": "0",
-      "brandId": "0",
+      "brandId": "acc4",
       "quantity": 1,
       "storageDate": "2025-04-16T08:41:01.347Z",
       "custom": {
@@ -62,49 +62,45 @@
   "brands": [
     {
       "id": "1",
-      "name": "drew estate"
+      "name": "Sanj Patel",
+      "siteUrl": "https://www.shouldismokethis.com/product-category/cigars/sanj-patel/"
     },
     {
-      "id": "2",
-      "name": "oliva"
+      "id": "3cba",
+      "name": "CAO Cigars",
+      "siteUrl": "https://www.caocigars.com/"
     },
     {
-      "id": "3",
-      "name": "dunbarton tobacco and trust"
+      "id": "acc4",
+      "name": "Luciano Cigars",
+      "siteUrl": "https://lucianocigars.com/"
     },
     {
-      "id": "4",
-      "name": "sanj patel"
+      "id": "46eb",
+      "name": "Drew Estate",
+      "siteUrl": "https://drewestate.com/"
     },
     {
-      "id": "5",
-      "name": "foundation cigar company"
+      "id": "3e1c",
+      "name": "Dunbarton Tobacco & Trust",
+      "siteUrl": "https://www.dunbartoncigars.com/"
     },
     {
-      "id": "6",
-      "name": "crowned heads"
+      "id": "1112",
+      "name": "Crowned Heads",
+      "siteUrl": "https://www.crownedheads.com/"
+    },
+    {
+      "id": "78eb",
+      "name": "Alec Bradley",
+      "siteUrl": "https://alecbradley.com/"
     }
   ],
   "cigars": [
     {
-      "id": "1",
-      "name": "charter oak habano",
-      "brandId": "5"
-    },
-    {
-      "id": "2",
-      "name": "charter oak maduro",
-      "brandId": "5"
-    },
-    {
-      "id": "3",
-      "name": "charter oak connecticut",
-      "brandId": "5"
-    },
-    {
       "id": "4",
       "name": "gas station sushi habano",
-      "brandId": "4",
+      "brandId": "1",
       "vitolas": [
         {
           "name": "lancero",
@@ -115,23 +111,28 @@
           "name": "toro",
           "length": 6,
           "ringGauge": 52
+        },
+        {
+          "name": "salomon",
+          "length": 7.25,
+          "ringGauge": 58
         }
       ]
     },
     {
       "id": "5",
       "name": "gas station sushi maduro",
-      "brandId": "4"
+      "brandId": "1"
     },
     {
       "id": "6",
       "name": "sp1014 black",
-      "brandId": "4"
+      "brandId": "1"
     },
     {
       "id": "7",
       "name": "undercrown 10",
-      "brandId": "1"
+      "brandId": "46eb"
     },
     {
       "id": "8",

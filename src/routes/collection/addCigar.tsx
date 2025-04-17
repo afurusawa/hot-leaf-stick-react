@@ -1,6 +1,5 @@
 "use client";
 
-import { useId } from "react";
 import { useForm } from "react-hook-form";
 import { createFileRoute, useLoaderData, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
@@ -20,7 +19,7 @@ import { queryClient } from "@/lib/queryClient";
 import { cigarQueryKeys, getBrands, getCigarByName, useAddCigar } from "../../features/collection/collectionApi";
 import { SearchSelect } from "@/features/collection/search-select";
 import { DatePickerInput } from "@/features/collection/date-picker-input";
-import { CollectionEntry } from "@/features/collection/collectionEntry";
+import { Brand, CollectionEntry } from "@/features/collection/collectionEntry";
 
 // Define the form schema with Zod for validation
 const formSchema = z.object({
@@ -45,7 +44,7 @@ const formSchema = z.object({
 type CollectionEntryForm = z.infer<typeof formSchema>;
 
 interface LoaderData {
-  brands: { id: string; name: string }[];
+  brands: Brand[];
 }
 
 export const Route = createFileRoute("/collection/addCigar")({

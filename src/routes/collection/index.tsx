@@ -45,16 +45,16 @@ function Collection() {
 
   const renderCard = (entry: CollectionEntry) => {
 
-    const brandName = brands.find((brand) => brand.id === entry.cigar?.brandId)?.name;
+    const brandName = brands.find((brand) => brand.id === entry.brandId)?.name;
 
     return (
       <Card className="w-[300px] h-[250px] flex flex-col justify-between">
         <CardHeader>
           <CardTitle className="flex items-start justify-between">
-            {capitalize(`${entry.cigar?.name} ${entry.custom?.vitola.name}`)}
+            {capitalize(`${entry.cigar?.name || entry.custom?.cigarName} ${entry.custom?.vitola.name}`)}
           </CardTitle>
           <CardDescription>
-            {capitalize(brandName || "")}
+            {brandName || entry.custom?.brandName}
             <Badge variant="outline" className="ml-4">
               {entry.custom?.vitola.length}x{entry.custom?.vitola.ringGauge}
             </Badge>

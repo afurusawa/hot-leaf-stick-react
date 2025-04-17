@@ -10,8 +10,8 @@ export interface CollectionEntry {
     brandName: string;
     vitola: Vitola;
   },
-  cigar?: Cigar;
-  brand?: Brand;
+  cigar?: Cigar; // joined
+  brand?: Brand; // joined
 }
 
 export interface CollectionEntryForm {
@@ -23,19 +23,22 @@ export interface CollectionEntryForm {
 }
 
 export interface Vitola {
+  id?: string;
   name: string;
   length: number;
   ringGauge: number;
 }
 
 export interface Brand {
-  id: string;
+  id?: string;
   name: string;
+  siteUrl: string;
 }
 
 export interface Cigar {
   id: string;
   name: string;
   brandId: string;
-  vitola: Vitola;
+  vitolas: Vitola[];
+  brand?: Brand; // joined
 }

@@ -1,7 +1,7 @@
 // src/api/cigarApi.ts
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
-import { Cigar, CollectionEntry } from './collectionEntry';
+import { Brand, Cigar, CollectionEntry } from './collectionEntry';
 
 const API_URL = 'http://localhost:3001';
 
@@ -22,7 +22,7 @@ export const getBrandById = async (id: string) => {
 };
 
 export const getCigars = async () => {
-  const response = await axios.get<Cigar[]>(`${API_URL}/cigars`);
+  const response = await axios.get<Cigar[]>(`${API_URL}/cigars?_embed=brand`);
   return response.data;
 };
 
@@ -49,6 +49,21 @@ export const cigarQueryKeys = {
 };
 
 // HOOKS
+
+
+export const useAddBrand = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (brand: Brand) => {
+      const response = await axios.post(`${API_URL}/brands`, brand);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: cigarQueryKeys.brands });
+    },
+  });
+};
 
 export const useAddCigar = () => {
   const queryClient = useQueryClient();
