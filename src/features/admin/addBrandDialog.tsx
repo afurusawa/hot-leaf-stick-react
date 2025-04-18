@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -24,11 +25,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Brand } from "../collection/collectionEntry";
-import { useAddBrand } from "../collection/collectionApi";
+import { useAddBrand, useUpdateBrand } from "../collection/collectionApi";
 import { cn } from "@/lib/utils";
 
 interface AddBrandDialogProps {
   brands: Brand[];
+  brand?: Brand;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   onSuccess: () => void;
 }
 
@@ -42,10 +46,18 @@ const formSchema = z.object({
     .url({ message: "Invalid URL format." })
 });
 
-export function AddBrandDialog({ brands, onSuccess }: AddBrandDialogProps) {
-  const [open, setOpen] = useState(false);
+export function AddBrandDialog({
+  brands,
+  brand,
+  open = false,
+  onOpenChange,
+  onSuccess
+}: AddBrandDialogProps) {
   const [error, setError] = useState<string | null>(null);
-  const { mutate, isPending } = useAddBrand();
+  const isEditing = !!brand;
+
+  const updateMutation = useUpdateBrand(brand?.id || "");
+  const addMutation = useAddBrand();
 
   // Initialize form
   const form = useForm<z.infer<typeof formSchema>>({
@@ -56,29 +68,44 @@ export function AddBrandDialog({ brands, onSuccess }: AddBrandDialogProps) {
     },
   });
 
+  // Reset form when item or open state changes
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        name: brand?.name || "",
+        siteUrl: brand?.siteUrl || "",
+      });
+    }
+  }, [brand, open, form]);
+
+
   // Handle form submission
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const brand: Brand = {
-      name: values.name,
-      siteUrl: values.siteUrl
-    };
-
-    console.log(brand);
-    mutate(brand, {
-      onSuccess: () => {
-        onSuccess();
-        setOpen(false); // Close Dialog
-        form.reset();
-      },
-      onError: (error) => {
-        console.error("Failed to add brand:", error);
-      },
-    });
-
+    if (isEditing) {
+      updateMutation.mutate({ ...values, id: brand.id }, {
+        onSuccess: () => {
+          onSuccess();
+          form.reset();
+        },
+        onError: (error) => {
+          console.error("Failed to add brand:", error);
+        },
+      });
+    } else {
+      addMutation.mutate(values, {
+        onSuccess: () => {
+          onSuccess();
+          form.reset();
+        },
+        onError: (error) => {
+          console.error("Failed to update brand:", error);
+        },
+      });
+    }
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline">Add Brand</Button>
       </DialogTrigger>
@@ -147,8 +174,23 @@ export function AddBrandDialog({ brands, onSuccess }: AddBrandDialogProps) {
               )}
             />
             <DialogFooter>
-              <Button type="submit" disabled={isPending}>
-                {isPending ? "Adding..." : "Add Brand"}
+              {
+                isEditing &&
+                <DialogClose asChild>
+                  <Button type="button" variant="secondary">
+                    Close
+                  </Button>
+                </DialogClose>
+              }
+              <Button
+                type="submit"
+                disabled={addMutation.isPending || updateMutation.isPending}
+              >
+                {
+                  addMutation.isPending || updateMutation.isPending ?
+                    isEditing ? "Updating..." : "Adding..." :
+                    isEditing ? "Update Brand" : "Add Brand"
+                }
               </Button>
             </DialogFooter>
           </form>

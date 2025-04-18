@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import { useState } from "react"
 import { createFileRoute, useLoaderData } from '@tanstack/react-router'
 import {
   ColumnDef,
@@ -14,7 +14,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, Link2, Link2Off, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -37,99 +37,29 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { queryClient } from "@/lib/queryClient"
-import { cigarQueryKeys, getCigars } from "@/features/collection/collectionApi"
+import { cigarQueryKeys, getBrands, getCigars } from "@/features/collection/collectionApi"
 import { Brand, Cigar } from "@/features/collection/collectionEntry"
 // import { AddCigarDialog } from "@/features/admin/addCigarDialog"
-import { capitalize } from "@/lib/utils"
-import { useState } from "react"
 
 
 interface LoaderData {
   cigars: Cigar[];
+  brands: Brand[];
 }
-
-const columns: ColumnDef<Cigar>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "id",
-    header: "Id",
-    cell: ({ row }) => (
-      <div>{row.getValue("id")}</div>
-    ),
-  },
-  {
-    accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <a className="flex item-start gap-2 item-center cursor-pointer" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Name
-          <ArrowUpDown className="w-4" />
-        </a>
-      )
-    },
-    cell: ({ row }) => <div>{capitalize(row.getValue("name"))}</div>,
-  },
-  {
-    accessorKey: "brand",
-    header: () => <div className="">Brand</div>,
-    cell: ({ row }) => {
-      const brand = row.getValue("brand") as Brand;
-      return <div className="font-medium">
-        {brand?.name || "unknown"}
-      </div>
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
-  },
-]
 
 export const Route = createFileRoute('/admin/manageCigars')({
   component: ManageCigars,
   loader: async () => {
+    const brands = await queryClient.ensureQueryData({
+      queryKey: cigarQueryKeys.brands,
+      queryFn: getBrands,
+    });
+
     const cigars = await queryClient.ensureQueryData({
       queryKey: cigarQueryKeys.cigars,
       queryFn: getCigars,
     });
+
     return { cigars };
   }
 })
@@ -140,7 +70,97 @@ function ManageCigars() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedCigar, setSelectedCigar] = useState<Cigar | undefined>(undefined);
+
   const { cigars } = useLoaderData({ from: '/admin/manageCigars' }) as LoaderData;
+
+
+  const columns: ColumnDef<Cigar>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "id",
+      header: "ID",
+      cell: ({ row }) => (
+        <div className="text-gray-500">{row.getValue("id")}</div>
+      ),
+    },
+    {
+      accessorKey: "name",
+      header: ({ column }) => {
+        return (
+          <a className="flex item-start gap-2 item-center cursor-pointer" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Name
+            <ArrowUpDown className="w-4" />
+          </a>
+        )
+      },
+      cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    },
+    {
+      accessorKey: "brand",
+      header: () => <div className="">Brand</div>,
+      cell: ({ row }) => {
+        const brand = row.getValue("brand") as Brand;
+        return <div className="font-medium">
+          {brand?.name || "unknown"}
+        </div>
+      },
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const cigar = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel className="text-gray-500">
+                Actions
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={
+                () => {
+                  handleOpenDialog(cigar);
+                }
+              }>
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem>Delete</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      },
+    },
+  ]
 
   const table = useReactTable({
     data: cigars,
@@ -161,6 +181,12 @@ function ManageCigars() {
     },
   })
 
+
+  const handleOpenDialog = (cigar?: Cigar) => {
+    setSelectedCigar(cigar);
+    setIsDialogOpen(true);
+  };
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4 gap-4">
@@ -172,8 +198,21 @@ function ManageCigars() {
           }
           className="max-w-sm"
         />
-
-        {/* <AddCigarDialog
+        {/* <AddBrandDialog
+          brands={brands}
+          brand={selectedBrand}
+          open={isDialogOpen}
+          onOpenChange={(open) => {
+            console.log(`open change: ${open}`)
+            setIsDialogOpen(open);
+            if (!open) setSelectedBrand(undefined);
+          }}
+          onSuccess={() => {
+            setIsDialogOpen(false);
+            setSelectedBrand(undefined);
+          }}
+        />
+        <AddCigarDialog
           cigars={cigars}
           onSuccess={handleAddCigar}
         /> */}

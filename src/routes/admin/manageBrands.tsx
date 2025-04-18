@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { createFileRoute, useLoaderData } from '@tanstack/react-router'
 import {
   ColumnDef,
@@ -39,117 +40,10 @@ import { queryClient } from "@/lib/queryClient"
 import { cigarQueryKeys, getBrands } from "@/features/collection/collectionApi"
 import { Brand } from "@/features/collection/collectionEntry"
 import { AddBrandDialog } from "@/features/admin/addBrandDialog"
-import { capitalize } from "@/lib/utils"
-import { useState } from "react"
-
 
 interface LoaderData {
   brands: Brand[];
 }
-
-
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  brandName: string
-}
-
-const columns: ColumnDef<Brand>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "id",
-    header: "Id",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("id")}</div>
-    ),
-  },
-  {
-    accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        // <Button
-        //   className="p-0 m-0 flex item-start justify-between"
-        //   variant="ghost"
-        //   onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        // >
-        //   Brand Name
-        //   <ArrowUpDown />
-        // </Button>
-        <a className="flex item-start gap-2 item-center cursor-pointer" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Brand Name
-          <ArrowUpDown className="w-4" />
-        </a>
-      )
-    },
-    cell: ({ row }) => <div>{capitalize(row.getValue("name"))}</div>,
-  },
-  {
-    accessorKey: "siteUrl",
-    header: () => <div className="">Website</div>,
-    cell: ({ row }) => {
-      return <div className="font-medium">
-        {
-          row.getValue("siteUrl") ?
-            <a href={row.getValue("siteUrl")} target="_blank">
-              <Link2 className="text-green-500 opacity-50 hover:opacity-100" />
-            </a> :
-            <Link2Off className="text-gray-500 opacity-50" />
-        }
-      </div>
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      // const payment = row.original
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-            // onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
-  },
-]
 
 export const Route = createFileRoute('/admin/manageBrands')({
   component: ManageBrands,
@@ -168,8 +62,103 @@ function ManageBrands() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState<Brand | undefined>(undefined);
+
   const { brands } = useLoaderData({ from: '/admin/manageBrands' }) as LoaderData;
 
+  const columns: ColumnDef<Brand>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "id",
+      header: "ID",
+      cell: ({ row }) => (
+        <div className="text-gray-500">{row.getValue("id")}</div>
+      ),
+    },
+    {
+      accessorKey: "name",
+      header: ({ column }) => {
+        return (
+          <a className="flex item-start gap-2 item-center cursor-pointer" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+            Brand Name
+            <ArrowUpDown className="w-4" />
+          </a>
+        )
+      },
+      cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    },
+    {
+      accessorKey: "siteUrl",
+      header: () => <div className="">Website</div>,
+      cell: ({ row }) => {
+        return <div className="font-medium">
+          {
+            row.getValue("siteUrl") ?
+              <a href={row.getValue("siteUrl")} target="_blank">
+                <Link2 className="text-green-500 opacity-50 hover:opacity-100" />
+              </a> :
+              <Link2Off className="text-gray-500 opacity-50" />
+          }
+        </div>
+      },
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const brand = row.original
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel className="text-gray-500">
+                Actions
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={
+                () => {
+                  handleOpenDialog(brand);
+                }
+              }>
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem>Delete</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      },
+    },
+  ];
+
+  // TODO: This is a hook that could be extracted
   const table = useReactTable({
     data: brands,
     columns,
@@ -189,9 +178,10 @@ function ManageBrands() {
     },
   })
 
-  const handleAddBrand = () => {
-
-  }
+  const handleOpenDialog = (brand?: Brand) => {
+    setSelectedBrand(brand);
+    setIsDialogOpen(true);
+  };
 
   return (
     <div className="w-full">
@@ -207,7 +197,17 @@ function ManageBrands() {
 
         <AddBrandDialog
           brands={brands}
-          onSuccess={handleAddBrand}
+          brand={selectedBrand}
+          open={isDialogOpen}
+          onOpenChange={(open) => {
+            console.log(`open change: ${open}`)
+            setIsDialogOpen(open);
+            if (!open) setSelectedBrand(undefined);
+          }}
+          onSuccess={() => {
+            setIsDialogOpen(false);
+            setSelectedBrand(undefined);
+          }}
         />
 
         <DropdownMenu>

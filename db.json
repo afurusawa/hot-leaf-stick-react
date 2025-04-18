@@ -99,78 +99,31 @@
   "cigars": [
     {
       "id": "4",
-      "name": "gas station sushi habano",
-      "brandId": "1",
-      "vitolas": [
-        {
-          "name": "lancero",
-          "length": 7.5,
-          "ringGauge": 38
-        },
-        {
-          "name": "toro",
-          "length": 6,
-          "ringGauge": 52
-        },
-        {
-          "name": "salomon",
-          "length": 7.25,
-          "ringGauge": 58
-        }
-      ]
-    },
-    {
-      "id": "5",
-      "name": "gas station sushi maduro",
+      "name": "Gas Station Sushi Habano",
       "brandId": "1"
+    }
+  ],
+  "vitolas": [
+    {
+      "id": "1",
+      "cigarId": "1",
+      "name": "lancero",
+      "length": 7.5,
+      "ringGauge": 38
     },
     {
-      "id": "6",
-      "name": "sp1014 black",
-      "brandId": "1"
+      "id": "1",
+      "cigarId": "1",
+      "name": "toro",
+      "length": 6,
+      "ringGauge": 52
     },
     {
-      "id": "7",
-      "name": "undercrown 10",
-      "brandId": "46eb"
-    },
-    {
-      "id": "8",
-      "name": "mil dias maduro",
-      "brandId": "3",
-      "vitolas": [
-        {
-          "id": "1",
-          "name": "edmundo",
-          "length": 5.38,
-          "ringGauge": 52
-        },
-        {
-          "id": "2",
-          "name": "double robusto",
-          "length": 6.3,
-          "ringGauge": 50
-        },
-        {
-          "id": "3",
-          "name": "topes",
-          "length": 4.9,
-          "ringGauge": 56
-        },
-        {
-          "id": "4",
-          "name": "sublime",
-          "length": 6,
-          "ringGauge": 54
-        },
-        {
-          "id": "5",
-          "name": "belicoso finos 2023",
-          "length": 5.5,
-          "ringGauge": 52,
-          "isLimited": true
-        }
-      ]
+      "id": "1",
+      "cigarId": "1",
+      "name": "salomon",
+      "length": 7.25,
+      "ringGauge": 58
     }
   ]
 }

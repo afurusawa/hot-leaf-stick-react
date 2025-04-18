@@ -36,9 +36,8 @@ export interface Brand {
 }
 
 export interface Cigar {
-  id: string;
+  id?: string;
   name: string;
   brandId: string;
-  vitolas: Vitola[];
   brand?: Brand; // joined
 }

@@ -65,6 +65,20 @@ export const useAddBrand = () => {
   });
 };
 
+export const useUpdateBrand = (id: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (brand: Brand) => {
+      const response = await axios.patch(`${API_URL}/brands/${id}`, brand);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: cigarQueryKeys.brands });
+    },
+  });
+}
+
 export const useAddCigar = () => {
   const queryClient = useQueryClient();
 
@@ -78,6 +92,20 @@ export const useAddCigar = () => {
     },
   });
 };
+
+export const useUpdateCigar = (id: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (cigar: Cigar) => {
+      const response = await axios.patch(`${API_URL}/cigars/${id}`, cigar);
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: cigarQueryKeys.cigars });
+    },
+  });
+}
 
 export const useGetCollection = () => {
   return useQuery({
