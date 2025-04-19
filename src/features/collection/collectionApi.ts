@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { Brand, Cigar, CollectionEntry } from './collectionEntry';
 
-const API_URL = 'http://localhost:3001';
+const API_URL = 'http://localhost:4000/api';
 
 // API CALLS
 export const getCollection = async () => {
@@ -12,7 +12,7 @@ export const getCollection = async () => {
 };
 
 export const getBrands = async () => {
-  const response = await axios.get<{ id: string, name: string }[]>(`${API_URL}/brands?_sort=name`);
+  const response = await axios.get<Brand[]>(`${API_URL}/brands`);
   return response.data;
 };
 

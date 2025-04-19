@@ -110,13 +110,13 @@ function ManageBrands() {
       cell: ({ row }) => <div>{row.getValue("name")}</div>,
     },
     {
-      accessorKey: "siteUrl",
+      accessorKey: "site_url",
       header: () => <div className="">Website</div>,
       cell: ({ row }) => {
         return <div className="font-medium">
           {
-            row.getValue("siteUrl") ?
-              <a href={row.getValue("siteUrl")} target="_blank">
+            row.getValue("site_url") ?
+              <a href={row.getValue("site_url")} target="_blank">
                 <Link2 className="text-green-500 opacity-50 hover:opacity-100" />
               </a> :
               <Link2Off className="text-gray-500 opacity-50" />

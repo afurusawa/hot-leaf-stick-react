@@ -32,7 +32,7 @@ export interface Vitola {
 export interface Brand {
   id?: string;
   name: string;
-  siteUrl: string;
+  site_url: string;
 }
 
 export interface Cigar {

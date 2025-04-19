@@ -41,7 +41,7 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
-  siteUrl: z
+  site_url: z
     .string()
     .url({ message: "Invalid URL format." })
 });
@@ -64,7 +64,7 @@ export function AddBrandDialog({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      siteUrl: "",
+      site_url: "",
     },
   });
 
@@ -73,7 +73,7 @@ export function AddBrandDialog({
     if (open) {
       form.reset({
         name: brand?.name || "",
-        siteUrl: brand?.siteUrl || "",
+        site_url: brand?.site_url || "",
       });
     }
   }, [brand, open, form]);
@@ -162,7 +162,7 @@ export function AddBrandDialog({
             />
             <FormField
               control={form.control}
-              name="siteUrl"
+              name="site_url"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Website</FormLabel>
