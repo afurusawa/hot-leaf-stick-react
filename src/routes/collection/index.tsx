@@ -11,14 +11,14 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "@tanstack/react-router";
-import { queryClient } from "@/lib/queryClient";
+import { queryClient } from "@/shared/lib/queryClient";
 import { cigarQueryKeys, collectionQueryKeys, getBrands, getCollection } from "@/features/collection/collectionApi";
-import { Brand, CollectionEntry } from "@/features/collection/collectionEntry";
-import { capitalize, getRelativeDateString } from "@/lib/utils";
+import { Brand, CollectionItem } from "@/features/collection/collectionItem";
+import { capitalize, getRelativeDateString } from "@/shared/lib/utils";
 
 
 interface LoaderData {
-  entries: CollectionEntry[];
+  entries: CollectionItem[];
   brands: Brand[];
 }
 
@@ -43,7 +43,7 @@ export const Route = createFileRoute("/collection/")({
 function Collection() {
   const { entries, brands } = useLoaderData({ from: '/collection/' }) as LoaderData;
 
-  const renderCard = (entry: CollectionEntry) => {
+  const renderCard = (entry: CollectionItem) => {
 
     const brandName = brands.find((brand) => brand.id === entry.brandId)?.name;
 
@@ -96,7 +96,7 @@ function Collection() {
         </CardFooter>
       </Card>
 
-      {entries.map((entry: CollectionEntry, index: Key | null | undefined) => (
+      {entries.map((entry: CollectionItem, index: Key | null | undefined) => (
         <div key={index}>
           {renderCard(entry)}
         </div>

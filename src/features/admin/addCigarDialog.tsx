@@ -24,9 +24,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Cigar } from "../collection/collectionEntry";
-import { useAddCigar, useUpdateCigar } from "../collection/collectionApi";
-import { cn } from "@/lib/utils";
+
+import type { Cigar } from "../cigars/cigar";
+import { useAddCigar, useUpdateCigar } from "../cigars";
+
+import { cn } from "@/shared/lib/utils";
 
 interface AddCigarDialogProps {
   cigars: Cigar[];
@@ -164,19 +166,7 @@ export function AddCigarDialog({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="siteUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Website</FormLabel>
-                  <FormControl>
-                    <Input type="text" placeholder="Website URL" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
             <DialogFooter>
               {
                 isEditing &&
@@ -203,3 +193,5 @@ export function AddCigarDialog({
     </Dialog >
   );
 }
+
+

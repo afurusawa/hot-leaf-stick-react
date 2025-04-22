@@ -36,20 +36,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { queryClient } from "@/lib/queryClient"
-import { cigarQueryKeys, getBrands } from "@/features/collection/collectionApi"
-import { Brand } from "@/features/collection/collectionEntry"
+import { queryClient } from "@/shared/lib/queryClient"
 import { AddBrandDialog } from "@/features/admin/addBrandDialog"
+import { useQuery } from "@tanstack/react-query"
+import { brandQueryKeys, getBrands } from "@/features/brands"
+import type { Brand } from "@/features/brands/brand"
 
 interface LoaderData {
   brands: Brand[];
 }
 
-export const Route = createFileRoute('/admin/manageBrands')({
+export const Route = createFileRoute('/admin/brands')({
   component: ManageBrands,
   loader: async () => {
+    console.log("loader called");
     const brands = await queryClient.ensureQueryData({
-      queryKey: cigarQueryKeys.brands,
+      queryKey: brandQueryKeys.brands,
       queryFn: getBrands,
     });
     return { brands };
@@ -65,7 +67,13 @@ function ManageBrands() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState<Brand | undefined>(undefined);
 
-  const { brands } = useLoaderData({ from: '/admin/manageBrands' }) as LoaderData;
+  const { brands: initialBrands } = useLoaderData({ from: '/admin/brands' }) as LoaderData;
+  const { data: brands } = useQuery({
+    queryKey: brandQueryKeys.brands,
+    queryFn: getBrands,
+    initialData: initialBrands,
+    staleTime: 0,
+  });
 
   const columns: ColumnDef<Brand>[] = [
     {
@@ -200,11 +208,11 @@ function ManageBrands() {
           brand={selectedBrand}
           open={isDialogOpen}
           onOpenChange={(open) => {
-            console.log(`open change: ${open}`)
             setIsDialogOpen(open);
             if (!open) setSelectedBrand(undefined);
           }}
           onSuccess={() => {
+            console.log("add brand dialog success");
             setIsDialogOpen(false);
             setSelectedBrand(undefined);
           }}

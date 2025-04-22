@@ -36,9 +36,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { queryClient } from "@/lib/queryClient"
-import { cigarQueryKeys, getBrands, getCigars } from "@/features/collection/collectionApi"
-import { Brand, Cigar } from "@/features/collection/collectionEntry"
+import { queryClient } from "@/shared/lib/queryClient";
+import { Cigar } from "@/features/cigars/cigar"
+import type { Brand } from "@/features/brands/brand"
+import { getBrands, brandQueryKeys } from "@/features/brands";
+import { getCigars } from "@/features/cigars/cigarApi"
+import { cigarQueryKeys } from "@/features/cigars/useCigar"
 // import { AddCigarDialog } from "@/features/admin/addCigarDialog"
 
 
@@ -47,11 +50,11 @@ interface LoaderData {
   brands: Brand[];
 }
 
-export const Route = createFileRoute('/admin/manageCigars')({
+export const Route = createFileRoute('/admin/cigars')({
   component: ManageCigars,
   loader: async () => {
     const brands = await queryClient.ensureQueryData({
-      queryKey: cigarQueryKeys.brands,
+      queryKey: brandQueryKeys.brands,
       queryFn: getBrands,
     });
 
@@ -60,7 +63,7 @@ export const Route = createFileRoute('/admin/manageCigars')({
       queryFn: getCigars,
     });
 
-    return { cigars };
+    return { brands, cigars };
   }
 })
 
@@ -73,7 +76,7 @@ function ManageCigars() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedCigar, setSelectedCigar] = useState<Cigar | undefined>(undefined);
 
-  const { cigars } = useLoaderData({ from: '/admin/manageCigars' }) as LoaderData;
+  const { cigars } = useLoaderData({ from: '/admin/cigars' }) as LoaderData;
 
 
   const columns: ColumnDef<Cigar>[] = [

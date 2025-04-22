@@ -1,5 +1,5 @@
 //  Used to display collection entires on the collection page
-export interface CollectionEntry {
+export interface CollectionItem {
   id: string;
   cigarId: string;
   brandId: string;
@@ -10,11 +10,11 @@ export interface CollectionEntry {
     brandName: string;
     vitola: Vitola;
   },
-  cigar?: Cigar; // joined
-  brand?: Brand; // joined
+  // cigar?: Cigar; // joined
+  // brand?: Brand; // joined
 }
 
-export interface CollectionEntryForm {
+export interface CollectionItemForm {
   cigarName: string;
   brandName: string;
   quantity: number;
@@ -27,17 +27,4 @@ export interface Vitola {
   name: string;
   length: number;
   ringGauge: number;
-}
-
-export interface Brand {
-  id?: string;
-  name: string;
-  site_url: string;
-}
-
-export interface Cigar {
-  id?: string;
-  name: string;
-  brandId: string;
-  brand?: Brand; // joined
 }

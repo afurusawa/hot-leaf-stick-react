@@ -14,8 +14,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as CollectionIndexImport } from './routes/collection/index'
 import { Route as CollectionAddCigarImport } from './routes/collection/addCigar'
-import { Route as AdminManageCigarsImport } from './routes/admin/manageCigars'
-import { Route as AdminManageBrandsImport } from './routes/admin/manageBrands'
+import { Route as AdminCigarsImport } from './routes/admin/cigars'
+import { Route as AdminBrandsImport } from './routes/admin/brands'
 
 // Create/Update Routes
 
@@ -37,15 +37,15 @@ const CollectionAddCigarRoute = CollectionAddCigarImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AdminManageCigarsRoute = AdminManageCigarsImport.update({
-  id: '/admin/manageCigars',
-  path: '/admin/manageCigars',
+const AdminCigarsRoute = AdminCigarsImport.update({
+  id: '/admin/cigars',
+  path: '/admin/cigars',
   getParentRoute: () => rootRoute,
 } as any)
 
-const AdminManageBrandsRoute = AdminManageBrandsImport.update({
-  id: '/admin/manageBrands',
-  path: '/admin/manageBrands',
+const AdminBrandsRoute = AdminBrandsImport.update({
+  id: '/admin/brands',
+  path: '/admin/brands',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -60,18 +60,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/admin/manageBrands': {
-      id: '/admin/manageBrands'
-      path: '/admin/manageBrands'
-      fullPath: '/admin/manageBrands'
-      preLoaderRoute: typeof AdminManageBrandsImport
+    '/admin/brands': {
+      id: '/admin/brands'
+      path: '/admin/brands'
+      fullPath: '/admin/brands'
+      preLoaderRoute: typeof AdminBrandsImport
       parentRoute: typeof rootRoute
     }
-    '/admin/manageCigars': {
-      id: '/admin/manageCigars'
-      path: '/admin/manageCigars'
-      fullPath: '/admin/manageCigars'
-      preLoaderRoute: typeof AdminManageCigarsImport
+    '/admin/cigars': {
+      id: '/admin/cigars'
+      path: '/admin/cigars'
+      fullPath: '/admin/cigars'
+      preLoaderRoute: typeof AdminCigarsImport
       parentRoute: typeof rootRoute
     }
     '/collection/addCigar': {
@@ -95,16 +95,16 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin/manageBrands': typeof AdminManageBrandsRoute
-  '/admin/manageCigars': typeof AdminManageCigarsRoute
+  '/admin/brands': typeof AdminBrandsRoute
+  '/admin/cigars': typeof AdminCigarsRoute
   '/collection/addCigar': typeof CollectionAddCigarRoute
   '/collection': typeof CollectionIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin/manageBrands': typeof AdminManageBrandsRoute
-  '/admin/manageCigars': typeof AdminManageCigarsRoute
+  '/admin/brands': typeof AdminBrandsRoute
+  '/admin/cigars': typeof AdminCigarsRoute
   '/collection/addCigar': typeof CollectionAddCigarRoute
   '/collection': typeof CollectionIndexRoute
 }
@@ -112,8 +112,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/admin/manageBrands': typeof AdminManageBrandsRoute
-  '/admin/manageCigars': typeof AdminManageCigarsRoute
+  '/admin/brands': typeof AdminBrandsRoute
+  '/admin/cigars': typeof AdminCigarsRoute
   '/collection/addCigar': typeof CollectionAddCigarRoute
   '/collection/': typeof CollectionIndexRoute
 }
@@ -122,22 +122,22 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/admin/manageBrands'
-    | '/admin/manageCigars'
+    | '/admin/brands'
+    | '/admin/cigars'
     | '/collection/addCigar'
     | '/collection'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/admin/manageBrands'
-    | '/admin/manageCigars'
+    | '/admin/brands'
+    | '/admin/cigars'
     | '/collection/addCigar'
     | '/collection'
   id:
     | '__root__'
     | '/'
-    | '/admin/manageBrands'
-    | '/admin/manageCigars'
+    | '/admin/brands'
+    | '/admin/cigars'
     | '/collection/addCigar'
     | '/collection/'
   fileRoutesById: FileRoutesById
@@ -145,16 +145,16 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminManageBrandsRoute: typeof AdminManageBrandsRoute
-  AdminManageCigarsRoute: typeof AdminManageCigarsRoute
+  AdminBrandsRoute: typeof AdminBrandsRoute
+  AdminCigarsRoute: typeof AdminCigarsRoute
   CollectionAddCigarRoute: typeof CollectionAddCigarRoute
   CollectionIndexRoute: typeof CollectionIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminManageBrandsRoute: AdminManageBrandsRoute,
-  AdminManageCigarsRoute: AdminManageCigarsRoute,
+  AdminBrandsRoute: AdminBrandsRoute,
+  AdminCigarsRoute: AdminCigarsRoute,
   CollectionAddCigarRoute: CollectionAddCigarRoute,
   CollectionIndexRoute: CollectionIndexRoute,
 }
@@ -170,8 +170,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/admin/manageBrands",
-        "/admin/manageCigars",
+        "/admin/brands",
+        "/admin/cigars",
         "/collection/addCigar",
         "/collection/"
       ]
@@ -179,11 +179,11 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.tsx"
     },
-    "/admin/manageBrands": {
-      "filePath": "admin/manageBrands.tsx"
+    "/admin/brands": {
+      "filePath": "admin/brands.tsx"
     },
-    "/admin/manageCigars": {
-      "filePath": "admin/manageCigars.tsx"
+    "/admin/cigars": {
+      "filePath": "admin/cigars.tsx"
     },
     "/collection/addCigar": {
       "filePath": "collection/addCigar.tsx"

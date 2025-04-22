@@ -24,9 +24,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Brand } from "../collection/collectionEntry";
-import { useAddBrand, useUpdateBrand } from "../collection/collectionApi";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
+import { useAddBrand, useUpdateBrand } from "../brands";
+import type { Brand } from "../brands/brand";
 
 interface AddBrandDialogProps {
   brands: Brand[];

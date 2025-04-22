@@ -1,6 +1,6 @@
 import * as React from "react";
 import { format, parse, isValid } from "date-fns";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 import { Input } from "@/components/ui/input";
 
 interface TripleDateInputProps {

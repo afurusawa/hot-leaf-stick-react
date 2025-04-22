@@ -15,11 +15,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { queryClient } from "@/lib/queryClient";
+import { queryClient } from "@/shared/lib/queryClient";
 import { cigarQueryKeys, getBrands, getCigarByName, useAddCigar } from "../../features/collection/collectionApi";
 import { SearchSelect } from "@/features/collection/search-select";
 import { DatePickerInput } from "@/features/collection/date-picker-input";
-import { Brand, CollectionEntry } from "@/features/collection/collectionEntry";
+import { Brand, CollectionItem } from "@/features/collection/collectionItem";
 
 // Define the form schema with Zod for validation
 const formSchema = z.object({
@@ -106,7 +106,7 @@ function AddCigar() {
           ringGauge: data.vitola.ringGauge,
         },
       }
-    } as CollectionEntry;
+    } as CollectionItem;
 
     mutate(entry, {
       onSuccess: () => {
