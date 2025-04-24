@@ -6,13 +6,21 @@ import {
   useUpdateBrand,
   useGetBrandById
 } from "./useBrand";
+import { useBrandsTable } from "./useBrandsTable";
+
+export {
+  getBrands,
+  getBrandById
+};
 
 export {
   brandQueryKeys,
-  getBrands,
-  getBrandById,
   useGetBrands,
   useAddBrand,
   useUpdateBrand,
   useGetBrandById,
+};
+
+export {
+  useBrandsTable
 };

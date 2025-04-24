@@ -1,3 +1,6 @@
+import { BrandGetDTO } from "../brands/brand";
+import { Cigar } from "../cigars/cigar";
+
 //  Used to display collection entires on the collection page
 export interface CollectionItem {
   id: string;
@@ -10,8 +13,8 @@ export interface CollectionItem {
     brandName: string;
     vitola: Vitola;
   },
-  // cigar?: Cigar; // joined
-  // brand?: Brand; // joined
+  cigar?: Cigar; // joined
+  brand?: BrandGetDTO; // joined
 }
 
 export interface CollectionItemForm {

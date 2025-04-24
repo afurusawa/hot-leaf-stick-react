@@ -24,15 +24,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-import type { Cigar } from "../cigars/cigar";
-import { useAddCigar, useUpdateCigar } from "../cigars";
-
 import { cn } from "@/shared/lib/utils";
 
+import type { BrandGetDTO } from "../brands/brand";
+import type { CigarGetDTO, CigarPayload } from "./cigar";
+import { useAddCigar, useUpdateCigar } from "./useCigar";
+import { SearchSelect } from "../collection/components/search-select";
+
 interface AddCigarDialogProps {
-  cigars: Cigar[];
-  cigar?: Cigar;
+  brands: BrandGetDTO[];
+  cigars: CigarGetDTO[];
+  cigar: CigarGetDTO | undefined;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   onSuccess: () => void;
@@ -43,7 +45,13 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
-  brandName: z.string().min(1, "Brand is required"),
+  // brandName: z.string().min(1, "Brand is required"),
+  brand: z
+    .object({
+      id: z.string().nullable(),
+      name: z.string().min(1, "Brand is required"),
+    })
+    .nullable(),
 });
 
 export function AddCigarDialog({
@@ -65,7 +73,10 @@ export function AddCigarDialog({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      brandName: ""
+      brand: {
+        id: '',
+        name: ""
+      },
     },
   });
 
@@ -74,6 +85,10 @@ export function AddCigarDialog({
     if (open) {
       form.reset({
         name: cigar?.name || "",
+        brand: {
+          id: cigar?.brand_id || "",
+          name: cigar?.brand_name || "",
+        }
       });
     }
   }, [cigar, open, form]);
@@ -81,14 +96,15 @@ export function AddCigarDialog({
 
   // Handle form submission
   function onSubmit(values: z.infer<typeof formSchema>) {
-
-    const data = {
-      ...cigar,
-      name: values.name
-    }
-
+    console.log(values);
+    return;
     if (isEditing) {
-      updateMutation.mutate({ ...cigar, ...values }, {
+      const payload = {
+        name: values.name || cigar.name,
+        brand_id: values.brand?.id || cigar.brand_id,
+      } as CigarPayload;
+
+      updateMutation.mutate(payload, {
         onSuccess: () => {
           onSuccess();
           form.reset();
@@ -98,7 +114,14 @@ export function AddCigarDialog({
         },
       });
     } else {
-      addMutation.mutate(values, {
+
+      // POST
+      const payload = {
+        name: values.name,
+        brand_id: values.brand?.id,
+      } as CigarPayload;
+
+      addMutation.mutate(payload, {
         onSuccess: () => {
           onSuccess();
           form.reset();
@@ -166,6 +189,17 @@ export function AddCigarDialog({
                 </FormItem>
               )}
             />
+
+            {/* Brand */}
+            <SearchSelect
+              control={form.control}
+              name="brand"
+              displayField="name"
+              items={brands}
+              label="Brand"
+              placeholder="Select or enter brand"
+            />
+
 
             <DialogFooter>
               {

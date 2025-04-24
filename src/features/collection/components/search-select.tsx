@@ -23,27 +23,29 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Brand } from "./collectionItem";
 
-interface SearchSelectProps {
+interface SearchSelectProps<T extends { id: string }> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: any; // From react-hook-form
-  name: string; // Form field name (e.g., "brandName")
-  brands: Brand[]; // List of brand suggestions
-  label?: string; // Optional label (defaults to "Brand")
+  name: string; // Form field name (e.g., "brand")
+  items: T[]; // List of items (replacing brands)
+  displayField?: keyof T; // Field to use for display and search (e.g., "name")
+  label?: string; // Optional label
   placeholder?: string; // Placeholder text
   className?: string; // For custom styling
   disabled?: boolean; // Disable the field
 }
 
-export function SearchSelect({
+export function SearchSelect<T extends { id: string }>({
   control,
   name,
-  brands,
+  items,
+  displayField = "name" as keyof T, // Default to "name"
   label = "Label",
   placeholder = "Enter label",
   className,
   disabled,
-}: SearchSelectProps) {
+}: SearchSelectProps<T>) {
   const [open, setOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
 
@@ -58,7 +60,7 @@ export function SearchSelect({
             <a
               className="text-sm underline cursor-pointer"
               onClick={() => {
-                field.onChange("");
+                field.onChange(null); // Clear the field
                 setSearchQuery("");
                 setOpen(false);
               }}
@@ -79,7 +81,9 @@ export function SearchSelect({
                     )}
                     disabled={disabled}
                   >
-                    {field.value || placeholder}
+                    {field.value
+                      ? String(field.value[displayField])
+                      : placeholder}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </FormControl>
@@ -87,61 +91,49 @@ export function SearchSelect({
               <PopoverContent className="w-full p-0">
                 <Command shouldFilter={true}>
                   <CommandInput
-                    placeholder="Search brand..."
+                    placeholder={`Search ${label.toLowerCase()}...`}
                     value={searchQuery}
                     onValueChange={(value) => {
                       setSearchQuery(value);
-                      field.onChange(value); // Update form value
                     }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
                         if (searchQuery) {
-                          field.onChange(searchQuery);
+                          // Optionally handle free-text input
+                          field.onChange({ [displayField]: searchQuery } as T);
                           setOpen(false);
                         }
                       }
                     }}
                   />
-                  <CommandEmpty>No brand found.</CommandEmpty>
+                  <CommandEmpty>No {label.toLowerCase()} found.</CommandEmpty>
                   <CommandGroup>
-                    {brands.map((suggestion) => (
+                    {items.map((item) => (
                       <CommandItem
-                        key={suggestion.id}
-                        value={suggestion.name}
-                        onSelect={(currentValue) => {
-                          field.onChange(currentValue);
+                        key={item.id}
+                        value={String(item[displayField])}
+                        onSelect={() => {
+                          field.onChange(item); // Store the entire item object
+                          setSearchQuery(String(item[displayField]));
                           setOpen(false);
                         }}
                       >
                         <Check
                           className={cn(
                             "mr-2 h-4 w-4",
-                            field.value === suggestion.name
+                            field.value?.id === item.id
                               ? "opacity-100"
                               : "opacity-0"
                           )}
                         />
-                        {suggestion.name}
+                        {String(item[displayField])}
                       </CommandItem>
                     ))}
                   </CommandGroup>
                 </Command>
               </PopoverContent>
             </Popover>
-            {/* <Button
-              variant="ghost"
-              size="icon"
-              className="ml-0"
-              onClick={() => {
-                field.onChange("");
-                setSearchQuery("");
-                setOpen(false);
-              }}
-              disabled={disabled}
-            >
-              <Delete />
-            </Button> */}
           </div>
           <FormMessage />
         </FormItem>

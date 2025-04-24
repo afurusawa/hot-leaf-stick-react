@@ -13,7 +13,7 @@ export const useGetCollection = () => {
   });
 };
 
-export const useAddCigar = () => {
+export const useAddCollectionItem = () => {
   return useMutation({
     mutationFn: addCollectionItem,
     onSuccess: () => {

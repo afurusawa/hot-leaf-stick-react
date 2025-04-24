@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,15 +15,27 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { queryClient } from "@/shared/lib/queryClient";
-import { cigarQueryKeys, getBrands, getCigarByName, useAddCigar } from "../../features/collection/collectionApi";
-import { SearchSelect } from "@/features/collection/search-select";
-import { DatePickerInput } from "@/features/collection/date-picker-input";
-import { Brand, CollectionItem } from "@/features/collection/collectionItem";
+
+
+import { brandQueryKeys, getBrands } from "@/features/brands";
+import { getCigarByName } from "@/features/cigars";
+import { useAddCollectionItem } from "@/features/collection";
+
+import { SearchSelect } from "@/features/collection/components/search-select";
+import { DatePickerInput } from "@/features/collection/components/date-picker-input";
+
+import type { BrandGetDTO } from "@/features/brands/brand";
+import type { CollectionItem } from "@/features/collection/collectionItem";
 
 // Define the form schema with Zod for validation
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  brandName: z.string().min(1, "Brand is required"),
+  brand: z
+    .object({
+      id: z.string().or(z.number()).nullable(),
+      name: z.string().min(1, "Brand is required"),
+    })
+    .nullable(),
   vitola: z.object({
     name: z.string().min(1, "Name is required"),
     length: z.coerce
@@ -44,29 +55,32 @@ const formSchema = z.object({
 type CollectionEntryForm = z.infer<typeof formSchema>;
 
 interface LoaderData {
-  brands: Brand[];
+  brands: BrandGetDTO[];
 }
 
-export const Route = createFileRoute("/collection/addCigar")({
-  component: AddCigar,
+export const Route = createFileRoute("/collection/addCollectionItem")({
+  component: AddCollectionItem,
   loader: async () => {
     const brands = await queryClient.ensureQueryData({
-      queryKey: cigarQueryKeys.brands,
+      queryKey: brandQueryKeys.brands,
       queryFn: getBrands,
     });
     return { brands };
   },
 });
 
-function AddCigar() {
-  const { brands } = useLoaderData({ from: '/collection/addCigar' }) as LoaderData;
+function AddCollectionItem() {
+  const { brands } = useLoaderData({ from: '/collection/addCollectionItem' }) as LoaderData;
 
   // Initialize react-hook-form with Zod resolver
   const form = useForm<CollectionEntryForm>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "fiat lux",
-      brandName: "luciano",
+      // brandName: "luciano",
+      brand: {
+        name: "luciano"
+      },
       vitola: {
         name: "genius",
         length: 5.5,
@@ -77,7 +91,7 @@ function AddCigar() {
     },
   });
 
-  const { mutate, isPending } = useAddCigar();
+  const { mutate, isPending } = useAddCollectionItem();
   const navigate = useNavigate();
 
   // Handle form submission
@@ -86,7 +100,7 @@ function AddCigar() {
     console.log(data);
     // If brand doesn't exist, set brandId to null
 
-    const brand = brands.find((b) => b.name.toLowerCase() === data.brandName.toLowerCase()) || null;
+    const brand = brands.find((b) => b.name.toLowerCase() === data.brand?.name.toLowerCase()) || null;
 
     // Get cigars with the same name
     const [cigar = null] = await getCigarByName(data.name);
@@ -99,7 +113,7 @@ function AddCigar() {
       storageDate: data.storageDate.toISOString(),
       custom: {
         cigarName: data.name,
-        brandName: data.brandName,
+        brandName: data.brand?.name,
         vitola: {
           name: data.vitola.name,
           length: data.vitola.length,
@@ -142,8 +156,9 @@ function AddCigar() {
           {/* Brand */}
           <SearchSelect
             control={form.control}
-            name="brandName"
-            brands={brands}
+            name="brand"
+            displayField="name"
+            items={brands}
             label="Brand"
             placeholder="Select or enter brand"
           />

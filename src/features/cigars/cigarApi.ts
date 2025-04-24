@@ -1,30 +1,30 @@
 import axios from 'axios';
 import { API_URL } from '@/shared/config/config';
-import { Cigar } from './cigar';
+import { CigarGetDTO, CigarPayload } from './cigar';
 
 const PATH_URL = `${API_URL}/cigars`;
 
 export const getCigars = async () => {
-  const response = await axios.get<Cigar[]>(`${PATH_URL}`);
+  const response = await axios.get<CigarGetDTO[]>(`${PATH_URL}`);
   return response.data;
 };
 
 export const getCigarById = async (id: string) => {
-  const response = await axios.get<Cigar>(`${PATH_URL}/${id}`);
+  const response = await axios.get<CigarGetDTO>(`${PATH_URL}/${id}`);
   return response.data;
 };
 
 export const getCigarByName = async (name: string) => {
-  const response = await axios.get<Cigar[]>(`${PATH_URL}?name=${name}`);
+  const response = await axios.get<CigarGetDTO[]>(`${PATH_URL}?name=${name}`);
   return response.data;
 };
 
-export const addCigar = async (cigar: Cigar) => {
+export const addCigar = async (cigar: CigarPayload) => {
   const response = await axios.post(`${PATH_URL}`, cigar);
   return response.data;
 };
 
-export const updateCigar = async (id: string, cigar: Cigar) => {
+export const updateCigar = async (id: string, cigar: CigarPayload) => {
   const response = await axios.patch(`${PATH_URL}/${id}`, cigar);
   return response.data;
 };

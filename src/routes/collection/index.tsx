@@ -1,5 +1,5 @@
 import { Key } from "react";
-import { createFileRoute, useLoaderData } from "@tanstack/react-router";
+import { createFileRoute, useLoaderData, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -10,16 +10,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "@tanstack/react-router";
 import { queryClient } from "@/shared/lib/queryClient";
-import { cigarQueryKeys, collectionQueryKeys, getBrands, getCollection } from "@/features/collection/collectionApi";
-import { Brand, CollectionItem } from "@/features/collection/collectionItem";
 import { capitalize, getRelativeDateString } from "@/shared/lib/utils";
-
+import { brandQueryKeys, getBrands } from "@/features/brands";
+import { collectionQueryKeys, getCollection } from "@/features/collection";
+import type { BrandGetDTO } from "@/features/brands/brand";
+import type { CollectionItem } from "@/features/collection/collectionItem";
 
 interface LoaderData {
   entries: CollectionItem[];
-  brands: Brand[];
+  brands: BrandGetDTO[];
 }
 
 export const Route = createFileRoute("/collection/")({
@@ -32,37 +32,37 @@ export const Route = createFileRoute("/collection/")({
 
     // I want to get all the brand names
     const brands = await queryClient.ensureQueryData({
-      queryKey: cigarQueryKeys.brands,
+      queryKey: brandQueryKeys.brands,
       queryFn: getBrands,
     });
 
     return { entries, brands };
-  },
+  }
 });
 
 function Collection() {
   const { entries, brands } = useLoaderData({ from: '/collection/' }) as LoaderData;
 
-  const renderCard = (entry: CollectionItem) => {
+  const renderCard = (item: CollectionItem) => {
 
-    const brandName = brands.find((brand) => brand.id === entry.brandId)?.name;
+    const brandName = brands.find((brand) => brand.id === item.brandId)?.name;
 
     return (
       <Card className="w-[300px] h-[250px] flex flex-col justify-between">
         <CardHeader>
           <CardTitle className="flex items-start justify-between">
-            {capitalize(`${entry.cigar?.name || entry.custom?.cigarName} ${entry.custom?.vitola.name}`)}
+            {capitalize(`${item.cigar?.name || item.custom?.cigarName} ${item.custom?.vitola.name}`)}
           </CardTitle>
           <CardDescription>
-            {brandName || entry.custom?.brandName}
+            {brandName || item.custom?.brandName}
             <Badge variant="outline" className="ml-4">
-              {entry.custom?.vitola.length}x{entry.custom?.vitola.ringGauge}
+              {item.custom?.vitola.length}x{item.custom?.vitola.ringGauge}
             </Badge>
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p>Qty: {entry.quantity}</p>
-          <p>Stored {getRelativeDateString(entry.storageDate)}</p>
+          <p>Qty: {item.quantity}</p>
+          <p>Stored {getRelativeDateString(item.storageDate)}</p>
         </CardContent>
         <CardFooter className="flex items-center justify-between w-full">
           <Button variant="outline" size="lg" className="w-full">

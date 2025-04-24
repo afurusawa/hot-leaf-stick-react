@@ -10,6 +10,7 @@ import {
   useAddCigar,
   useUpdateCigar
 } from './useCigar';
+import { useCigarsTable } from './useCigarsTable';
 
 export {
   cigarQueryKeys,
@@ -20,4 +21,8 @@ export {
   useGetCigarById,
   useAddCigar,
   useUpdateCigar
+};
+
+export {
+  useCigarsTable
 };

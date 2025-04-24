@@ -13,7 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as CollectionIndexImport } from './routes/collection/index'
-import { Route as CollectionAddCigarImport } from './routes/collection/addCigar'
+import { Route as CollectionAddCollectionItemImport } from './routes/collection/addCollectionItem'
 import { Route as AdminCigarsImport } from './routes/admin/cigars'
 import { Route as AdminBrandsImport } from './routes/admin/brands'
 
@@ -31,11 +31,12 @@ const CollectionIndexRoute = CollectionIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const CollectionAddCigarRoute = CollectionAddCigarImport.update({
-  id: '/collection/addCigar',
-  path: '/collection/addCigar',
-  getParentRoute: () => rootRoute,
-} as any)
+const CollectionAddCollectionItemRoute =
+  CollectionAddCollectionItemImport.update({
+    id: '/collection/addCollectionItem',
+    path: '/collection/addCollectionItem',
+    getParentRoute: () => rootRoute,
+  } as any)
 
 const AdminCigarsRoute = AdminCigarsImport.update({
   id: '/admin/cigars',
@@ -74,11 +75,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCigarsImport
       parentRoute: typeof rootRoute
     }
-    '/collection/addCigar': {
-      id: '/collection/addCigar'
-      path: '/collection/addCigar'
-      fullPath: '/collection/addCigar'
-      preLoaderRoute: typeof CollectionAddCigarImport
+    '/collection/addCollectionItem': {
+      id: '/collection/addCollectionItem'
+      path: '/collection/addCollectionItem'
+      fullPath: '/collection/addCollectionItem'
+      preLoaderRoute: typeof CollectionAddCollectionItemImport
       parentRoute: typeof rootRoute
     }
     '/collection/': {
@@ -97,7 +98,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin/brands': typeof AdminBrandsRoute
   '/admin/cigars': typeof AdminCigarsRoute
-  '/collection/addCigar': typeof CollectionAddCigarRoute
+  '/collection/addCollectionItem': typeof CollectionAddCollectionItemRoute
   '/collection': typeof CollectionIndexRoute
 }
 
@@ -105,7 +106,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin/brands': typeof AdminBrandsRoute
   '/admin/cigars': typeof AdminCigarsRoute
-  '/collection/addCigar': typeof CollectionAddCigarRoute
+  '/collection/addCollectionItem': typeof CollectionAddCollectionItemRoute
   '/collection': typeof CollectionIndexRoute
 }
 
@@ -114,7 +115,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin/brands': typeof AdminBrandsRoute
   '/admin/cigars': typeof AdminCigarsRoute
-  '/collection/addCigar': typeof CollectionAddCigarRoute
+  '/collection/addCollectionItem': typeof CollectionAddCollectionItemRoute
   '/collection/': typeof CollectionIndexRoute
 }
 
@@ -124,21 +125,21 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/brands'
     | '/admin/cigars'
-    | '/collection/addCigar'
+    | '/collection/addCollectionItem'
     | '/collection'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/admin/brands'
     | '/admin/cigars'
-    | '/collection/addCigar'
+    | '/collection/addCollectionItem'
     | '/collection'
   id:
     | '__root__'
     | '/'
     | '/admin/brands'
     | '/admin/cigars'
-    | '/collection/addCigar'
+    | '/collection/addCollectionItem'
     | '/collection/'
   fileRoutesById: FileRoutesById
 }
@@ -147,7 +148,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminBrandsRoute: typeof AdminBrandsRoute
   AdminCigarsRoute: typeof AdminCigarsRoute
-  CollectionAddCigarRoute: typeof CollectionAddCigarRoute
+  CollectionAddCollectionItemRoute: typeof CollectionAddCollectionItemRoute
   CollectionIndexRoute: typeof CollectionIndexRoute
 }
 
@@ -155,7 +156,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminBrandsRoute: AdminBrandsRoute,
   AdminCigarsRoute: AdminCigarsRoute,
-  CollectionAddCigarRoute: CollectionAddCigarRoute,
+  CollectionAddCollectionItemRoute: CollectionAddCollectionItemRoute,
   CollectionIndexRoute: CollectionIndexRoute,
 }
 
@@ -172,7 +173,7 @@ export const routeTree = rootRoute
         "/",
         "/admin/brands",
         "/admin/cigars",
-        "/collection/addCigar",
+        "/collection/addCollectionItem",
         "/collection/"
       ]
     },
@@ -185,8 +186,8 @@ export const routeTree = rootRoute
     "/admin/cigars": {
       "filePath": "admin/cigars.tsx"
     },
-    "/collection/addCigar": {
-      "filePath": "collection/addCigar.tsx"
+    "/collection/addCollectionItem": {
+      "filePath": "collection/addCollectionItem.tsx"
     },
     "/collection/": {
       "filePath": "collection/index.tsx"

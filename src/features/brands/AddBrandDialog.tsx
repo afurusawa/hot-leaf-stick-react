@@ -25,12 +25,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/shared/lib/utils";
-import { useAddBrand, useUpdateBrand } from "../brands";
-import type { Brand } from "../brands/brand";
+import { useAddBrand, useUpdateBrand } from ".";
+import type { BrandGetDTO } from "./brand";
 
 interface AddBrandDialogProps {
-  brands: Brand[];
-  brand?: Brand;
+  brands: BrandGetDTO[];
+  brand: BrandGetDTO | undefined;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   onSuccess: () => void;

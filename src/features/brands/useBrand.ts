@@ -3,14 +3,14 @@ import axios from 'axios';
 import { queryClient } from '@/shared/lib/queryClient';
 import { API_URL } from '@/shared/config/config';
 import { getBrandById, getBrands } from './brandApi';
-import { Brand } from './brand';
+import { BrandGetDTO } from './brand';
 
 export const brandQueryKeys = {
   brands: ['brands'] as const,
   brandById: (id: string) => ['brands', id] as const,
 };
 
-export const useGetBrands = (initialData?: Brand[]) => {
+export const useGetBrands = (initialData?: BrandGetDTO[]) => {
   return useQuery({
     queryKey: brandQueryKeys.brands,
     queryFn: getBrands,
@@ -21,7 +21,7 @@ export const useGetBrands = (initialData?: Brand[]) => {
 
 export const useAddBrand = () => {
   return useMutation({
-    mutationFn: async (brand: Brand) => {
+    mutationFn: async (brand: BrandGetDTO) => {
       const response = await axios.post(`${API_URL}/brands`, brand);
       return response.data;
     },
@@ -33,7 +33,7 @@ export const useAddBrand = () => {
 
 export const useUpdateBrand = (id: string) => {
   return useMutation({
-    mutationFn: async (brand: Brand) => {
+    mutationFn: async (brand: BrandGetDTO) => {
       const response = await axios.patch(`${API_URL}/brands/${id}`, brand);
       return response.data;
     },

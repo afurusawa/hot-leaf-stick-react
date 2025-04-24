@@ -79,12 +79,12 @@ const navCommunity = [
 const navAdmin = [
   {
     title: "Brands",
-    url: "/admin/manageBrands",
+    url: "/admin/brands",
     icon: List
   },
   {
     title: "Cigars",
-    url: "/admin/manageCigars",
+    url: "/admin/cigars",
     icon: List
   }
 ]
