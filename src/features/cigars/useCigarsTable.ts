@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,8 +11,8 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import type { CigarGetDTO } from "./cigar"
+} from "@tanstack/react-table";
+import type { CigarGetDTO } from "./cigar";
 
 // Define custom TableMeta interface for Brand
 export interface CigarTableMeta extends TableMeta<CigarGetDTO> {
@@ -26,10 +26,10 @@ interface UseCigarsTableProps {
 }
 
 export function useCigarsTable({ cigars, columns }: UseCigarsTableProps) {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data: cigars,
@@ -48,10 +48,10 @@ export function useCigarsTable({ cigars, columns }: UseCigarsTableProps) {
       columnVisibility,
       rowSelection,
     }
-  })
+  });
 
   return {
     ...table,
     flexRender,
-  }
+  };
 }

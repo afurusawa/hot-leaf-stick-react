@@ -84,7 +84,7 @@ const navAdmin = [
   },
   {
     title: "Cigars",
-    url: "/admin/cigars",
+    url: "/admin/cigars/manage",
     icon: List
   }
 ]

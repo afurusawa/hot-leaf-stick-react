@@ -16,6 +16,8 @@ import { Route as CollectionIndexImport } from './routes/collection/index'
 import { Route as CollectionAddCollectionItemImport } from './routes/collection/addCollectionItem'
 import { Route as AdminCigarsImport } from './routes/admin/cigars'
 import { Route as AdminBrandsImport } from './routes/admin/brands'
+import { Route as AdminCigarsManageImport } from './routes/admin/cigars/manage'
+import { Route as AdminCigarsCigarIdImport } from './routes/admin/cigars/$cigarId'
 
 // Create/Update Routes
 
@@ -48,6 +50,18 @@ const AdminBrandsRoute = AdminBrandsImport.update({
   id: '/admin/brands',
   path: '/admin/brands',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AdminCigarsManageRoute = AdminCigarsManageImport.update({
+  id: '/manage',
+  path: '/manage',
+  getParentRoute: () => AdminCigarsRoute,
+} as any)
+
+const AdminCigarsCigarIdRoute = AdminCigarsCigarIdImport.update({
+  id: '/$cigarId',
+  path: '/$cigarId',
+  getParentRoute: () => AdminCigarsRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -89,34 +103,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CollectionIndexImport
       parentRoute: typeof rootRoute
     }
+    '/admin/cigars/$cigarId': {
+      id: '/admin/cigars/$cigarId'
+      path: '/$cigarId'
+      fullPath: '/admin/cigars/$cigarId'
+      preLoaderRoute: typeof AdminCigarsCigarIdImport
+      parentRoute: typeof AdminCigarsImport
+    }
+    '/admin/cigars/manage': {
+      id: '/admin/cigars/manage'
+      path: '/manage'
+      fullPath: '/admin/cigars/manage'
+      preLoaderRoute: typeof AdminCigarsManageImport
+      parentRoute: typeof AdminCigarsImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface AdminCigarsRouteChildren {
+  AdminCigarsCigarIdRoute: typeof AdminCigarsCigarIdRoute
+  AdminCigarsManageRoute: typeof AdminCigarsManageRoute
+}
+
+const AdminCigarsRouteChildren: AdminCigarsRouteChildren = {
+  AdminCigarsCigarIdRoute: AdminCigarsCigarIdRoute,
+  AdminCigarsManageRoute: AdminCigarsManageRoute,
+}
+
+const AdminCigarsRouteWithChildren = AdminCigarsRoute._addFileChildren(
+  AdminCigarsRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin/brands': typeof AdminBrandsRoute
-  '/admin/cigars': typeof AdminCigarsRoute
+  '/admin/cigars': typeof AdminCigarsRouteWithChildren
   '/collection/addCollectionItem': typeof CollectionAddCollectionItemRoute
   '/collection': typeof CollectionIndexRoute
+  '/admin/cigars/$cigarId': typeof AdminCigarsCigarIdRoute
+  '/admin/cigars/manage': typeof AdminCigarsManageRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin/brands': typeof AdminBrandsRoute
-  '/admin/cigars': typeof AdminCigarsRoute
+  '/admin/cigars': typeof AdminCigarsRouteWithChildren
   '/collection/addCollectionItem': typeof CollectionAddCollectionItemRoute
   '/collection': typeof CollectionIndexRoute
+  '/admin/cigars/$cigarId': typeof AdminCigarsCigarIdRoute
+  '/admin/cigars/manage': typeof AdminCigarsManageRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/admin/brands': typeof AdminBrandsRoute
-  '/admin/cigars': typeof AdminCigarsRoute
+  '/admin/cigars': typeof AdminCigarsRouteWithChildren
   '/collection/addCollectionItem': typeof CollectionAddCollectionItemRoute
   '/collection/': typeof CollectionIndexRoute
+  '/admin/cigars/$cigarId': typeof AdminCigarsCigarIdRoute
+  '/admin/cigars/manage': typeof AdminCigarsManageRoute
 }
 
 export interface FileRouteTypes {
@@ -127,6 +175,8 @@ export interface FileRouteTypes {
     | '/admin/cigars'
     | '/collection/addCollectionItem'
     | '/collection'
+    | '/admin/cigars/$cigarId'
+    | '/admin/cigars/manage'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -134,6 +184,8 @@ export interface FileRouteTypes {
     | '/admin/cigars'
     | '/collection/addCollectionItem'
     | '/collection'
+    | '/admin/cigars/$cigarId'
+    | '/admin/cigars/manage'
   id:
     | '__root__'
     | '/'
@@ -141,13 +193,15 @@ export interface FileRouteTypes {
     | '/admin/cigars'
     | '/collection/addCollectionItem'
     | '/collection/'
+    | '/admin/cigars/$cigarId'
+    | '/admin/cigars/manage'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminBrandsRoute: typeof AdminBrandsRoute
-  AdminCigarsRoute: typeof AdminCigarsRoute
+  AdminCigarsRoute: typeof AdminCigarsRouteWithChildren
   CollectionAddCollectionItemRoute: typeof CollectionAddCollectionItemRoute
   CollectionIndexRoute: typeof CollectionIndexRoute
 }
@@ -155,7 +209,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminBrandsRoute: AdminBrandsRoute,
-  AdminCigarsRoute: AdminCigarsRoute,
+  AdminCigarsRoute: AdminCigarsRouteWithChildren,
   CollectionAddCollectionItemRoute: CollectionAddCollectionItemRoute,
   CollectionIndexRoute: CollectionIndexRoute,
 }
@@ -184,13 +238,25 @@ export const routeTree = rootRoute
       "filePath": "admin/brands.tsx"
     },
     "/admin/cigars": {
-      "filePath": "admin/cigars.tsx"
+      "filePath": "admin/cigars.tsx",
+      "children": [
+        "/admin/cigars/$cigarId",
+        "/admin/cigars/manage"
+      ]
     },
     "/collection/addCollectionItem": {
       "filePath": "collection/addCollectionItem.tsx"
     },
     "/collection/": {
       "filePath": "collection/index.tsx"
+    },
+    "/admin/cigars/$cigarId": {
+      "filePath": "admin/cigars/$cigarId.tsx",
+      "parent": "/admin/cigars"
+    },
+    "/admin/cigars/manage": {
+      "filePath": "admin/cigars/manage.tsx",
+      "parent": "/admin/cigars"
     }
   }
 }

@@ -1,6 +1,6 @@
 import { Key } from "react";
 import { createFileRoute, useLoaderData, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -16,16 +16,17 @@ import { brandQueryKeys, getBrands } from "@/features/brands";
 import { collectionQueryKeys, getCollection } from "@/features/collection";
 import type { BrandGetDTO } from "@/features/brands/brand";
 import type { CollectionItem } from "@/features/collection/collectionItem";
+import { CollectionSearchBar } from "@/features/collection/components/search-bar";
 
 interface LoaderData {
-  entries: CollectionItem[];
+  items: CollectionItem[];
   brands: BrandGetDTO[];
 }
 
 export const Route = createFileRoute("/collection/")({
   component: Collection,
   loader: async () => {
-    const entries = await queryClient.ensureQueryData({
+    const items = await queryClient.ensureQueryData({
       queryKey: collectionQueryKeys.all,
       queryFn: getCollection,
     });
@@ -36,12 +37,12 @@ export const Route = createFileRoute("/collection/")({
       queryFn: getBrands,
     });
 
-    return { entries, brands };
+    return { items, brands };
   }
 });
 
 function Collection() {
-  const { entries, brands } = useLoaderData({ from: '/collection/' }) as LoaderData;
+  const { items, brands } = useLoaderData({ from: '/collection/' }) as LoaderData;
 
   const renderCard = (item: CollectionItem) => {
 
@@ -56,7 +57,7 @@ function Collection() {
           <CardDescription>
             {brandName || item.custom?.brandName}
             <Badge variant="outline" className="ml-4">
-              {item.custom?.vitola.length}x{item.custom?.vitola.ringGauge}
+              {item.custom?.vitola.length}x{item.custom?.vitola.ring_gauge}
             </Badge>
           </CardDescription>
         </CardHeader>
@@ -71,36 +72,39 @@ function Collection() {
         </CardFooter>
       </Card>
     );
-  }
+  };
 
   return (
-    <div className="flex flex-wrap gap-4">
-      <Card className="w-[300px] h-[250px] flex flex-col justify-between bg-transparent border-gray-500">
-        <CardHeader>
-          <CardTitle>
-            Add Cigars
-          </CardTitle>
-          <CardDescription>
-            Add new cigars to your collection
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex items-center justify-center">
-          {/* <Plus className="w-16 h-16 opacity-50" /> */}
-        </CardContent>
-        <CardFooter className="flex items-end justify-between">
-          <Link to="/collection/addCigar" className="w-full">
-            <Button variant="default" size="lg" className="w-full">
-              Add
-            </Button>
-          </Link>
-        </CardFooter>
-      </Card>
+    <div>
+      <CollectionSearchBar />
+      <div className="flex flex-wrap gap-4">
+        <Card className="w-[300px] h-[250px] flex flex-col justify-between bg-transparent border-gray-500">
+          <CardHeader>
+            <CardTitle>
+              Add Cigars
+            </CardTitle>
+            <CardDescription>
+              Add new cigars to your collection
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex items-center justify-center">
+            {/* <Plus className="w-16 h-16 opacity-50" /> */}
+          </CardContent>
+          <CardFooter className="flex items-end justify-between">
+            <Link to="/collection/addCollectionItem" className="w-full">
+              <Button variant="default" size="lg" className="w-full">
+                Add
+              </Button>
+            </Link>
+          </CardFooter>
+        </Card>
 
-      {entries.map((entry: CollectionItem, index: Key | null | undefined) => (
-        <div key={index}>
-          {renderCard(entry)}
-        </div>
-      ))}
+        {items.map((item: CollectionItem, index: Key | null | undefined) => (
+          <div key={index}>
+            {renderCard(item)}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

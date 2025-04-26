@@ -17,7 +17,7 @@ export interface CigarGetDTO {
     name: string;
     length: number;
     ring_gauge: number;
-  };
+  }[];
 }
 
 export interface CigarPayload {

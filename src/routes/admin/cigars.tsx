@@ -1,30 +1,13 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { queryClient } from "@/shared/lib/queryClient";
-import { brandQueryKeys, getBrands } from '@/features/brands';
-import { cigarQueryKeys, getCigars } from '@/features/cigars';
-import { ManageCigars } from '@/features/cigars/ManageCigars';
-
-import type { Cigar } from "@/features/cigars/cigar"
-import type { BrandGetDTO } from "@/features/brands/brand"
-
-interface LoaderData {
-  cigars: Cigar[];
-  brands: BrandGetDTO[];
-}
+import { createFileRoute, Outlet } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/admin/cigars')({
-  component: ManageCigars,
-  loader: async () => {
-    const brands = await queryClient.ensureQueryData({
-      queryKey: brandQueryKeys.brands,
-      queryFn: getBrands,
-    });
-
-    const cigars = await queryClient.ensureQueryData({
-      queryKey: cigarQueryKeys.cigars,
-      queryFn: getCigars,
-    });
-
-    return { brands, cigars } as LoaderData;
-  }
+  component: RouteComponent,
 });
+
+function RouteComponent() {
+  return (
+    <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+      <Outlet />
+    </div>
+  );
+}

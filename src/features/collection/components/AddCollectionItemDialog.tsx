@@ -25,13 +25,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/shared/lib/utils";
+import type { BrandGetDTO } from "@/features/brands/brand";
+import type { CigarGetDTO, CigarPayload } from "@/features/cigars/cigar";
+import { useAddCigar, useUpdateCigar } from "@/features/cigars";
+import { SearchSelect } from "./search-select";
+import { useAddCollectionItem } from "../useCollection";
 
-import type { BrandGetDTO } from "../brands/brand";
-import type { CigarGetDTO, CigarPayload } from "./cigar";
-import { useAddCigar, useUpdateCigar } from "./useCigar";
-import { SearchSelect } from "../collection/components/search-select";
-
-interface AddCigarDialogProps {
+interface AddCollectionItemDialogProps {
   brands: BrandGetDTO[];
   cigars: CigarGetDTO[];
   cigar: CigarGetDTO | undefined;
@@ -40,56 +40,60 @@ interface AddCigarDialogProps {
   onSuccess: () => void;
 }
 
-// Form schema using zod
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+  brand: z.object({
+    id: z.string().nullable(), // id can be null, but brand object itself is required
+    name: z.string().min(1, "Brand is required"),
   }),
-  // brandName: z.string().min(1, "Brand is required"),
-  brand: z
-    .object({
-      id: z.string().nullable(),
-      name: z.string().min(1, "Brand is required"),
-    })
-    .nullable(),
+  cigar: z.object({
+    id: z.string().nullable(), // id can be null, but cigar object itself is required
+    name: z.string().min(1, "Name is required"),
+  }),
+  vitola: z.object({
+    id: z.string().nullable(), // id can be null, but vitola object itself is required
+    name: z.string().min(1, "Name is required"),
+    length: z.coerce
+      .number({ invalid_type_error: 'Must be a number' }),
+    ringGauge: z.coerce
+      .number({ invalid_type_error: 'Must be a number' })
+      .int('Must be a whole number'),
+  }),
+  quantity: z.coerce
+    .number({ invalid_type_error: 'Price must be a number' })
+    .int('Must be a whole number')
+    .min(1, 'Must add at least one cigar'),
+  storageDate: z.date({ required_error: 'Storage date is required' }),
 });
 
-export function AddCigarDialog({
+export function AddCollectionItemDialog({
   brands,
-  cigars,
-  cigar,
   open = false,
   onOpenChange,
   onSuccess
-}: AddCigarDialogProps) {
+}: AddCollectionItemDialogProps) {
   const [error, setError] = useState<string | null>(null);
-  const isEditing = !!cigar;
 
   const updateMutation = useUpdateCigar(cigar?.id || "");
-  const addMutation = useAddCigar();
+  const addMutation = useAddCollectionItem();
 
   // Initialize form
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      brand: null,
+      brand: undefined,
+      cigar: undefined,
+      vitola: undefined,
+      quantity: 0,
+      storageDate: new Date(),
     },
   });
 
   // Reset form when item or open state changes
   useEffect(() => {
-    console.log("called")
     if (open) {
-      form.reset({
-        name: cigar?.name || "",
-        brand: {
-          id: cigar?.brand_id || null,
-          name: cigar?.brand_name || "",
-        }
-      });
+      form.reset();
     }
-  }, [cigar, open, form]);
+  }, [open, form]);
 
 
   // Handle form submission

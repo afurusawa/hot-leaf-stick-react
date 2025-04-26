@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useLoaderData } from '@tanstack/react-router'
+import { useState } from "react";
+import { Link, Outlet, useLoaderData } from '@tanstack/react-router';
 import {
   ColumnDef,
   flexRender,
-} from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+} from "@tanstack/react-table";
+import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -17,8 +17,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -26,14 +26,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import type { CigarGetDTO } from "@/features/cigars/cigar"
-import type { BrandGetDTO } from "@/features/brands/brand"
-import { CigarTableMeta, useCigarsTable } from "./useCigarsTable"
-import { cigarQueryKeys } from "./useCigar"
-import { getCigars } from "./cigarApi"
-import { useQuery } from "@tanstack/react-query"
-import { AddCigarDialog } from "./AddCigarDialog"
+} from "@/components/ui/table";
+import type { CigarGetDTO } from "@/features/cigars/cigar";
+import type { BrandGetDTO } from "@/features/brands/brand";
+import { CigarTableMeta, useCigarsTable } from "./useCigarsTable";
+import { cigarQueryKeys } from "./useCigar";
+import { getCigars } from "./cigarApi";
+import { useQuery } from "@tanstack/react-query";
+import { AddCigarDialog } from "./AddCigarDialog";
 
 
 interface LoaderData {
@@ -79,9 +79,18 @@ const columns: ColumnDef<CigarGetDTO>[] = [
           Name
           <ArrowUpDown className="w-4" />
         </a>
-      )
+      );
     },
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    cell: ({ row }) => {
+      const id = row.getValue('id') as string;
+      return (
+        <div className="hover:underline">
+          <Link to="/admin/cigars/$cigarId" params={{ cigarId: id }}>
+            {row.getValue("name")}
+          </Link>
+        </div>
+      );
+    }
   },
   {
     accessorKey: "brand_name",
@@ -91,12 +100,12 @@ const columns: ColumnDef<CigarGetDTO>[] = [
           Brand
           <ArrowUpDown className="w-4" />
         </a>
-      )
+      );
     },
     cell: ({ row }) => {
       return <div className="font-medium">
         {row.getValue("brand_name") || "unknown"}
-      </div>
+      </div>;
     },
   },
   {
@@ -131,16 +140,16 @@ const columns: ColumnDef<CigarGetDTO>[] = [
             <DropdownMenuItem>Delete (WIP)</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 export function ManageCigars() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [selectedCigar, setSelectedCigar] = useState<CigarGetDTO | undefined>(undefined)
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedCigar, setSelectedCigar] = useState<CigarGetDTO | undefined>(undefined);
 
-  const { cigars: initialCigars, brands } = useLoaderData({ from: '/admin/cigars' }) as LoaderData;
+  const { cigars: initialCigars, brands } = useLoaderData({ from: '/admin/cigars/manage' }) as LoaderData;
   const { data: cigars } = useQuery({
     queryKey: cigarQueryKeys.cigars,
     queryFn: getCigars,
@@ -153,8 +162,8 @@ export function ManageCigars() {
     columns,
     meta: {
       onEdit: (cigar: CigarGetDTO) => {
-        setSelectedCigar(cigar)
-        setIsDialogOpen(true)
+        setSelectedCigar(cigar);
+        setIsDialogOpen(true);
       },
     },
   });
@@ -206,7 +215,7 @@ export function ManageCigars() {
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>
-                )
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -226,7 +235,7 @@ export function ManageCigars() {
                           header.getContext()
                         )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -285,6 +294,7 @@ export function ManageCigars() {
           </Button>
         </div>
       </div>
+      <Outlet />
     </div>
   );
 }

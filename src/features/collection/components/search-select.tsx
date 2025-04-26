@@ -81,7 +81,7 @@ export function SearchSelect<T extends { id: string }>({
                     )}
                     disabled={disabled}
                   >
-                    {field.value
+                    {field.value && field.value[displayField]
                       ? String(field.value[displayField])
                       : placeholder}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -111,7 +111,7 @@ export function SearchSelect<T extends { id: string }>({
                   <CommandGroup>
                     {items.map((item) => (
                       <CommandItem
-                        key={item.id}
+                        key={item.id ?? String(item[displayField])}
                         value={String(item[displayField])}
                         onSelect={() => {
                           field.onChange(item); // Store the entire item object

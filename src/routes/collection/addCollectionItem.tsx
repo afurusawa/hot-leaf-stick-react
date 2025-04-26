@@ -77,8 +77,8 @@ function AddCollectionItem() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "fiat lux",
-      // brandName: "luciano",
       brand: {
+        id: "",
         name: "luciano"
       },
       vitola: {
@@ -106,21 +106,21 @@ function AddCollectionItem() {
     const [cigar = null] = await getCigarByName(data.name);
 
     // // Transform data if needed
-    const entry = {
-      cigarId: cigar?.id || 0,
-      brandId: brand?.id || 0,
-      quantity: data.quantity,
-      storageDate: data.storageDate.toISOString(),
-      custom: {
-        cigarName: data.name,
-        brandName: data.brand?.name,
-        vitola: {
-          name: data.vitola.name,
-          length: data.vitola.length,
-          ringGauge: data.vitola.ringGauge,
-        },
-      }
-    } as CollectionItem;
+    // const entry = {
+    //   cigarId: cigar?.id || 0,
+    //   brandId: brand?.id || 0,
+    //   quantity: data.quantity,
+    //   storageDate: data.storageDate.toISOString(),
+    //   custom: {
+    //     cigarName: data.name,
+    //     brandName: data.brand?.name,
+    //     vitola: {
+    //       name: data.vitola.name,
+    //       length: data.vitola.length,
+    //       ringGauge: data.vitola.ringGauge,
+    //     },
+    //   }
+    // } as CollectionItem;
 
     mutate(entry, {
       onSuccess: () => {
@@ -139,6 +139,26 @@ function AddCollectionItem() {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="">
+
+          {/* Brand */}
+          <SearchSelect
+            control={form.control}
+            name="brand"
+            displayField="name"
+            items={brands}
+            label="Brand"
+            placeholder="Select or enter brand"
+          />
+
+          {/* Cigar */}
+          <SearchSelect
+            control={form.control}
+            name="cigar"
+            displayField="name"
+            items={cigars}
+            label="Cigar"
+            placeholder="Select or enter cigar name"
+          />
           <FormField
             control={form.control}
             name="name"
@@ -153,15 +173,6 @@ function AddCollectionItem() {
             )}
           />
 
-          {/* Brand */}
-          <SearchSelect
-            control={form.control}
-            name="brand"
-            displayField="name"
-            items={brands}
-            label="Brand"
-            placeholder="Select or enter brand"
-          />
 
           {/* Vitola */}
           <FormField
