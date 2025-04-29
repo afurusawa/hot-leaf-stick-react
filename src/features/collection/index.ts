@@ -1,7 +1,7 @@
 import {
   getCollection,
-  addCollectionItem,
-} from './collectionApi';
+  createCollectionItem,
+} from './collection.api';
 import {
   collectionQueryKeys,
   useGetCollection,
@@ -11,7 +11,7 @@ import {
 export {
   collectionQueryKeys,
   getCollection,
-  addCollectionItem,
+  createCollectionItem,
   useGetCollection,
   useAddCollectionItem,
 };

@@ -27,11 +27,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { CigarGetDTO } from "@/features/cigars/cigar";
-import type { BrandGetDTO } from "@/features/brands/brand";
+import type { CigarGetDTO } from "@/features/cigars/cigar.types";
+import type { BrandGetDTO } from "@/features/brands/brand.types";
 import { CigarTableMeta, useCigarsTable } from "./useCigarsTable";
 import { cigarQueryKeys } from "./useCigar";
-import { getCigars } from "./cigarApi";
+import { getCigars } from "./cigar.api";
 import { useQuery } from "@tanstack/react-query";
 import { AddCigarDialog } from "./AddCigarDialog";
 

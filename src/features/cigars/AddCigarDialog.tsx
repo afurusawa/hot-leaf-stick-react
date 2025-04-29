@@ -79,7 +79,6 @@ export function AddCigarDialog({
 
   // Reset form when item or open state changes
   useEffect(() => {
-    console.log("called")
     if (open) {
       form.reset({
         name: cigar?.name || "",

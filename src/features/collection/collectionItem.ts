@@ -1,5 +1,7 @@
-import { BrandGetDTO } from "../brands/brand";
+
+import { BrandGetDTO } from "../brands/brand.types";
 import { Cigar } from "../cigars/cigar";
+import { Vitola } from "../vitolas/vitola.types";
 
 //  Used to display collection entires on the collection page
 // deprecated
@@ -42,13 +44,6 @@ export interface CollectionItemForm {
   quantity: number;
   vitola: Vitola;
   storageDate: Date;
-}
-
-export interface Vitola {
-  id: string;
-  name: string;
-  length: number;
-  ring_gauge: number;
 }
 
 export interface CustomCollectionGetDTO {

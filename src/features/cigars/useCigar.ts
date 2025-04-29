@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '@/shared/lib/queryClient';
-import { addCigar, getCigarById, updateCigar } from './cigarApi';
-import type { Cigar } from './cigar';
+import { createCigar, getCigarById, updateCigar } from './cigar.api';
+import type { CigarCreateDTO } from './cigar.types';
 
 export const cigarQueryKeys = {
   cigars: ['cigars'] as const,
@@ -18,16 +18,16 @@ export const useGetCigarById = (id: string) => {
 
 export const useAddCigar = () => {
   return useMutation({
-    mutationFn: addCigar,
+    mutationFn: createCigar,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: cigarQueryKeys.cigars });
     },
-  })
-}
+  });
+};
 
 export const useUpdateCigar = (id: string) => {
   return useMutation({
-    mutationFn: (cigar: Cigar) => updateCigar(id, cigar),
+    mutationFn: (cigar: CigarCreateDTO) => updateCigar(id, cigar),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: cigarQueryKeys.cigars });
     },

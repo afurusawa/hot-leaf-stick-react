@@ -1,13 +1,13 @@
-import { createFileRoute, notFound, useLoaderData, useParams } from '@tanstack/react-router';
+import { createFileRoute, useLoaderData, useParams } from '@tanstack/react-router';
 import { queryClient } from "@/shared/lib/queryClient";
 import { cigarQueryKeys, getCigarById } from '@/features/cigars';
 import { CigarGetDTO } from '@/features/cigars/cigar';
-import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from "@/components/ui/badge";
 import { TrendingUpIcon } from 'lucide-react';
 import { Vitola } from '@/features/collection/collectionItem';
 import { useQuery } from '@tanstack/react-query';
+import { VitolaDialog } from '@/features/vitolas';
 
 interface LoaderData {
   cigar: CigarGetDTO;
@@ -21,20 +21,6 @@ export const Route = createFileRoute('/admin/cigars/$cigarId')({
       queryKey: cigarQueryKeys.cigarById(params.cigarId),
       queryFn: () => getCigarById(params.cigarId),
     });
-
-    // // Validate the cigar data
-    // if (!cigar || !cigar.vitolas) {
-    //   throw notFound(); // Triggers the notFoundComponent or default not-found handling
-    // }
-
-    // // return cigar;
-    // const cigar = {
-    //   id: params.cigarId,
-    //   name: 'Test Cigar',
-    //   brand_name: 'Test Brand',
-    //   vitolas: [{ id: '1', name: 'Robusto', length: 5, ring_gauge: 50 }],
-    // };
-    // console.log('Mock cigar:', cigar);
     return { cigar } as LoaderData;
   }
 });
@@ -55,10 +41,18 @@ function CigarDetails() {
         <CardHeader className="relative">
           <div className="flex items-center justify-between">
             <CardDescription>Vitola</CardDescription>
-            <div>
+            <div className="flex items-center gap-2">
               <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
                 {vitola.length}x{vitola.ring_gauge}
               </Badge>
+              <VitolaDialog
+                cigarId={cigarId}
+                existingVitolas={cigar.vitolas || []}
+                onVitolaAdded={() => {
+                  queryClient.invalidateQueries({ queryKey: cigarQueryKeys.cigarById(cigarId) });
+                }}
+                vitolaToEdit={vitola}
+              />
             </div>
           </div>
           <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
@@ -85,7 +79,13 @@ function CigarDetails() {
           <h2 className="text-xl text-gray-500">by {cigar.brand_name}</h2>
         </div>
         <div className="flex">
-          <Button>Add Vitola</Button>
+          <VitolaDialog
+            cigarId={cigarId}
+            existingVitolas={cigar.vitolas || []}
+            onVitolaAdded={() => {
+              queryClient.invalidateQueries({ queryKey: cigarQueryKeys.cigarById(cigarId) });
+            }}
+          />
         </div>
       </div>
 

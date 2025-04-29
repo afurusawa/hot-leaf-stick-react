@@ -3,7 +3,7 @@ import {
   getCigarById,
   getCigarByName,
   updateCigar,
-} from './cigarApi';
+} from './cigar.api';
 import {
   cigarQueryKeys,
   useGetCigarById,

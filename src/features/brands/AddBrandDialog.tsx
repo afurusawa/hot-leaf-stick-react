@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/shared/lib/utils";
 import { useAddBrand, useUpdateBrand } from ".";
-import type { BrandGetDTO } from "./brand";
+import type { BrandGetDTO } from "./brand.types";
 
 interface AddBrandDialogProps {
   brands: BrandGetDTO[];

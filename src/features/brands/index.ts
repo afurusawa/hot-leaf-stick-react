@@ -1,4 +1,4 @@
-import { getBrands, getBrandById } from "./brandApi";
+import { getBrands, getBrandById } from "./brand.api";
 import {
   brandQueryKeys,
   useGetBrands,

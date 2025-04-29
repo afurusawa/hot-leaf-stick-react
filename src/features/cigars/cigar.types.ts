@@ -1,9 +1,12 @@
-import { BrandGetDTO } from "../brands/brand";
+import { BrandGetDTO } from "../brands/brand.types";
+import { Vitola } from "../vitolas/vitola.types";
 
-export interface Cigar {
-  id?: string;
+export interface CigarResponse {
+  id: string;
   name: string;
   brand_id: string;
+  brand_name: string;
+  vitolas: Vitola[];
   brand?: BrandGetDTO; // joined
 }
 
@@ -20,7 +23,7 @@ export interface CigarGetDTO {
   }[];
 }
 
-export interface CigarPayload {
+export interface CigarCreateDTO {
   name: string;
   brand_id: string;
 }

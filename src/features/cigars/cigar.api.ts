@@ -19,7 +19,7 @@ export const getCigarByName = async (name: string) => {
   return response.data;
 };
 
-export const addCigar = async (cigar: CigarPayload) => {
+export const createCigar = async (cigar: CigarPayload) => {
   const response = await axios.post(`${PATH_URL}`, cigar);
   return response.data;
 };

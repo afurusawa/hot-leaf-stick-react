@@ -2,8 +2,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { queryClient } from '@/shared/lib/queryClient';
 import { API_URL } from '@/shared/config/config';
-import { getBrandById, getBrands } from './brandApi';
-import { BrandGetDTO } from './brand';
+import { getBrandById, getBrands } from './brand.api';
+import { BrandGetDTO } from './brand.types';
 
 export const brandQueryKeys = {
   brands: ['brands'] as const,

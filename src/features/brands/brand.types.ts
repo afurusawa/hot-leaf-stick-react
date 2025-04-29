@@ -4,7 +4,7 @@ export interface BrandGetDTO {
   site_url: string;
 }
 
-export interface BrandPayload {
+export interface BrandCreateDTO {
   name: string;
   site_url: string;
 }

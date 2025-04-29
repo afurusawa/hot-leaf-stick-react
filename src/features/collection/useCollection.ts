@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from "@/shared/lib/queryClient";
-import { addCollectionItem, getCollection, updateCollectionItem } from './collectionApi';
+import { createCollectionItem, getCollection, updateCollectionItem } from './collection.api';
 import { CollectionPayload } from './collectionItem';
 
 export const collectionQueryKeys = {
@@ -16,7 +16,7 @@ export const useGetCollection = () => {
 
 export const useAddCollectionItem = () => {
   return useMutation({
-    mutationFn: addCollectionItem,
+    mutationFn: createCollectionItem,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: collectionQueryKeys.all });
     },

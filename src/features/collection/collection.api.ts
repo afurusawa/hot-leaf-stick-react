@@ -9,7 +9,7 @@ export const getCollection = async () => {
   return response.data;
 };
 
-export const addCollectionItem = async (item: CollectionPayload) => {
+export const createCollectionItem = async (item: CollectionPayload) => {
   const response = await axios.post(`${PATH_URL}`, item);
   return response.data;
 };
