@@ -4,10 +4,11 @@ import { cigarQueryKeys, getCigarById } from '@/features/cigars';
 import { CigarGetDTO } from '@/features/cigars/cigar';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from "@/components/ui/badge";
-import { TrendingUpIcon } from 'lucide-react';
+import { TrendingUpIcon, PencilIcon } from 'lucide-react';
 import { Vitola } from '@/features/collection/collectionItem';
 import { useQuery } from '@tanstack/react-query';
 import { VitolaDialog } from '@/features/vitolas';
+import { Button } from "@/components/ui/button";
 
 interface LoaderData {
   cigar: CigarGetDTO;
@@ -37,34 +38,37 @@ function CigarDetails() {
 
   const renderCard = (vitola: Vitola) => {
     return (
-      <Card className="@container/card">
-        <CardHeader className="relative">
-          <div className="flex items-center justify-between">
-            <CardDescription>Vitola</CardDescription>
-            <div className="flex items-center gap-2">
-              <Badge variant="outline" className="flex gap-1 rounded-lg text-xs">
-                {vitola.length}x{vitola.ring_gauge}
+      <Card className="@container/card hover:shadow-lg transition-shadow duration-200">
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-2 flex-wrap pr-8">
+              <CardTitle className="@[250px]/card:text-2xl text-xl font-semibold">
+                {vitola.name}
+              </CardTitle>
+              <Badge variant="outline" className="flex items-center rounded-lg text-sm">
+                <span className="font-medium">{vitola.length}"</span>
+                <span className="text-muted-foreground">×</span>
+                <span className="font-medium">{vitola.ring_gauge}</span>
               </Badge>
-              <VitolaDialog
-                cigarId={cigarId}
-                existingVitolas={cigar.vitolas || []}
-                onVitolaAdded={() => {
-                  queryClient.invalidateQueries({ queryKey: cigarQueryKeys.cigarById(cigarId) });
-                }}
-                vitolaToEdit={vitola}
-              />
             </div>
+            <VitolaDialog
+              cigarId={cigarId}
+              existingVitolas={cigar.vitolas || []}
+              onVitolaAdded={() => {
+                queryClient.invalidateQueries({ queryKey: cigarQueryKeys.cigarById(cigarId) });
+              }}
+              vitolaToEdit={vitola}
+            >
+              <Button variant="ghost" size="icon" className="h-8 w-8 -mr-2 -mt-2">
+                <PencilIcon className="h-4 w-4 text-muted-foreground hover:text-foreground transition-colors" />
+              </Button>
+            </VitolaDialog>
           </div>
-          <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
-            {vitola.name}
-          </CardTitle>
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1 text-sm">
-          <div className="line-clamp-1 flex gap-2 font-medium">
-            Trending up this month <TrendingUpIcon className="size-4" />
-          </div>
-          <div className="text-muted-foreground">
-            Visitors for the last 6 months
+        <CardFooter className="border-t pt-3">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <TrendingUpIcon className="h-4 w-4" />
+            <span>Trending this month</span>
           </div>
         </CardFooter>
       </Card>
@@ -85,7 +89,11 @@ function CigarDetails() {
             onVitolaAdded={() => {
               queryClient.invalidateQueries({ queryKey: cigarQueryKeys.cigarById(cigarId) });
             }}
-          />
+          >
+            <Button variant="outline" size="sm">
+              Add Vitola
+            </Button>
+          </VitolaDialog>
         </div>
       </div>
 

@@ -1,4 +1,3 @@
-
 import { BrandGetDTO } from "../brands/brand.types";
 import { Cigar } from "../cigars/cigar";
 import { Vitola } from "../vitolas/vitola.types";
@@ -63,4 +62,4 @@ export interface CustomCollectionPayload {
   vitola_length: number;
   vitola_ring_gauge: number;
   storage_date: string;
-}
+} 

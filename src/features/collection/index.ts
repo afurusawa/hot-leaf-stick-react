@@ -4,14 +4,14 @@ import {
 } from './collection.api';
 import {
   collectionQueryKeys,
-  useGetCollection,
-  useAddCollectionItem,
+  useQueryCollection,
+  useCreateCollectionItem,
 } from './useCollection';
 
 export {
   collectionQueryKeys,
   getCollection,
   createCollectionItem,
-  useGetCollection,
-  useAddCollectionItem,
+  useQueryCollection,
+  useCreateCollectionItem,
 };

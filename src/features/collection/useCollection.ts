@@ -7,14 +7,14 @@ export const collectionQueryKeys = {
   all: ['collection'] as const,
 };
 
-export const useGetCollection = () => {
+export const useQueryCollection = () => {
   return useQuery({
     queryKey: collectionQueryKeys.all,
     queryFn: getCollection,
   });
 };
 
-export const useAddCollectionItem = () => {
+export const useCreateCollectionItem = () => {
   return useMutation({
     mutationFn: createCollectionItem,
     onSuccess: () => {

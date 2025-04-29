@@ -19,7 +19,7 @@ import { queryClient } from "@/shared/lib/queryClient";
 
 import { brandQueryKeys, getBrands } from "@/features/brands";
 import { getCigarByName } from "@/features/cigars";
-import { useAddCollectionItem } from "@/features/collection";
+import { useCreateCollectionItem } from "@/features/collection";
 
 import { SearchSelect } from "@/features/collection/components/search-select";
 import { DatePickerInput } from "@/features/collection/components/date-picker-input";
@@ -91,7 +91,7 @@ function AddCollectionItem() {
     },
   });
 
-  const { mutate, isPending } = useAddCollectionItem();
+  const { mutate, isPending } = useCreateCollectionItem();
   const navigate = useNavigate();
 
   // Handle form submission

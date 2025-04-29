@@ -8,7 +8,7 @@ export const cigarQueryKeys = {
   cigarById: (id: string) => ['cigars', id] as const,
 };
 
-export const useGetCigarById = (id: string) => {
+export const useQueryCigarById = (id: string) => {
   return useQuery({
     queryKey: cigarQueryKeys.cigarById(id),
     queryFn: () => getCigarById(id),
@@ -16,7 +16,7 @@ export const useGetCigarById = (id: string) => {
   });
 };
 
-export const useAddCigar = () => {
+export const useCreateCigar = () => {
   return useMutation({
     mutationFn: createCigar,
     onSuccess: () => {

@@ -28,7 +28,7 @@ import { cn } from "@/shared/lib/utils";
 
 import type { BrandGetDTO } from "../brands/brand";
 import type { CigarGetDTO, CigarPayload } from "./cigar";
-import { useAddCigar, useUpdateCigar } from "./useCigar";
+import { useCreateCigar, useUpdateCigar } from "./useCigar";
 import { SearchSelect } from "../collection/components/search-select";
 
 interface AddCigarDialogProps {
@@ -66,7 +66,7 @@ export function AddCigarDialog({
   const isEditing = !!cigar;
 
   const updateMutation = useUpdateCigar(cigar?.id || "");
-  const addMutation = useAddCigar();
+  const addMutation = useCreateCigar();
 
   // Initialize form
   const form = useForm<z.infer<typeof formSchema>>({

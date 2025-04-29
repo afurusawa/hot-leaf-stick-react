@@ -6,8 +6,8 @@ import {
 } from './cigar.api';
 import {
   cigarQueryKeys,
-  useGetCigarById,
-  useAddCigar,
+  useQueryCigarById,
+  useCreateCigar,
   useUpdateCigar
 } from './useCigar';
 import { useCigarsTable } from './useCigarsTable';
@@ -18,8 +18,8 @@ export {
   getCigarById,
   getCigarByName,
   updateCigar,
-  useGetCigarById,
-  useAddCigar,
+  useQueryCigarById,
+  useCreateCigar,
   useUpdateCigar
 };
 

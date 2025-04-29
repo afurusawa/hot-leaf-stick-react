@@ -1,10 +1,10 @@
 import { getBrands, getBrandById } from "./brand.api";
 import {
   brandQueryKeys,
-  useGetBrands,
-  useAddBrand,
+  useQueryBrands,
+  useCreateBrand,
   useUpdateBrand,
-  useGetBrandById
+  useQueryBrandById
 } from "./useBrand";
 import { useBrandsTable } from "./useBrandsTable";
 
@@ -15,10 +15,10 @@ export {
 
 export {
   brandQueryKeys,
-  useGetBrands,
-  useAddBrand,
+  useQueryBrands,
+  useCreateBrand,
   useUpdateBrand,
-  useGetBrandById,
+  useQueryBrandById,
 };
 
 export {

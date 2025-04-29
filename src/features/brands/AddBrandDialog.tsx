@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/shared/lib/utils";
-import { useAddBrand, useUpdateBrand } from ".";
+import { useCreateBrand, useUpdateBrand } from ".";
 import type { BrandGetDTO } from "./brand.types";
 
 interface AddBrandDialogProps {
@@ -57,7 +57,7 @@ export function AddBrandDialog({
   const isEditing = !!brand;
 
   const updateMutation = useUpdateBrand(brand?.id || "");
-  const addMutation = useAddBrand();
+  const addMutation = useCreateBrand();
 
   // Initialize form
   const form = useForm<z.infer<typeof formSchema>>({

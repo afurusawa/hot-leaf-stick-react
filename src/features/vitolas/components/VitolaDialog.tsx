@@ -18,12 +18,14 @@ interface VitolaDialogProps {
   cigarId: string;
   onVitolaAdded: () => void;
   vitolaToEdit?: Vitola;
+  children?: React.ReactNode;
 }
 
 export function VitolaDialog({
   cigarId,
   onVitolaAdded,
   vitolaToEdit,
+  children,
 }: VitolaDialogProps) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState(vitolaToEdit?.name || '');
@@ -69,9 +71,11 @@ export function VitolaDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          {vitolaToEdit ? 'Edit Vitola' : 'Add Vitola'}
-        </Button>
+        {children || (
+          <Button variant="outline" size="sm">
+            {vitolaToEdit ? 'Edit Vitola' : 'Add Vitola'}
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

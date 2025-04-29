@@ -27,9 +27,9 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/shared/lib/utils";
 import type { BrandGetDTO } from "@/features/brands/brand";
 import type { CigarGetDTO, CigarPayload } from "@/features/cigars/cigar";
-import { useAddCigar, useUpdateCigar } from "@/features/cigars";
+import { useCreateCigar, useUpdateCigar } from "@/features/cigars";
 import { SearchSelect } from "./search-select";
-import { useAddCollectionItem } from "../useCollection";
+import { useCreateCollectionItem } from "../useCollection";
 
 interface AddCollectionItemDialogProps {
   brands: BrandGetDTO[];
@@ -74,7 +74,7 @@ export function AddCollectionItemDialog({
   const [error, setError] = useState<string | null>(null);
 
   const updateMutation = useUpdateCigar(cigar?.id || "");
-  const addMutation = useAddCollectionItem();
+  const addMutation = useCreateCollectionItem();
 
   // Initialize form
   const form = useForm<z.infer<typeof formSchema>>({

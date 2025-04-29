@@ -7,7 +7,7 @@ export const vitolaQueryKeys = {
   byCigarId: (cigarId: string) => [...vitolaQueryKeys.all, 'byCigarId', cigarId] as const,
 };
 
-export function useCreateVitola() {
+export const useCreateVitola = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -16,9 +16,9 @@ export function useCreateVitola() {
       queryClient.invalidateQueries({ queryKey: vitolaQueryKeys.byCigarId(data.cigar_id) });
     },
   });
-}
+};
 
-export function useUpdateVitola() {
+export const useUpdateVitola = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -27,9 +27,9 @@ export function useUpdateVitola() {
       queryClient.invalidateQueries({ queryKey: vitolaQueryKeys.byCigarId(data.cigar_id) });
     },
   });
-}
+};
 
-export function useDeleteVitola() {
+export const useDeleteVitola = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -38,4 +38,4 @@ export function useDeleteVitola() {
       queryClient.invalidateQueries({ queryKey: vitolaQueryKeys.byCigarId(cigarId) });
     },
   });
-} 
+}; 
