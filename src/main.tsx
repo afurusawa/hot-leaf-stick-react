@@ -1,23 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { createRouter, RouterProvider } from '@tanstack/react-router';
+import { RouterProvider } from '@tanstack/react-router';
 import './index.css';
 import { ThemeProvider } from './components/theme-provider.tsx';
-import { queryClient } from "@/shared/lib/queryClient.ts"
-
-// Import the generated route tree
-import { routeTree } from './routeTree.gen.ts';
-
-// Create a new router instance
-const router = createRouter({ routeTree })
-
-// Register the router instance for type safety
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router
-  }
-}
+import { queryClient } from "@/shared/lib/queryClient.ts";
+import { router } from './router';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

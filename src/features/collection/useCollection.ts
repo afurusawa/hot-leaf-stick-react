@@ -1,7 +1,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from "@/shared/lib/queryClient";
 import { createCollectionItem, getCollection, updateCollectionItem } from './collection.api';
-import { CollectionPayload } from './collectionItem';
+import { CollectionPayload } from './CollectionItem.types';
+
 
 export const collectionQueryKeys = {
   all: ['collection'] as const,

@@ -11,6 +11,8 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as RegisterImport } from './routes/register'
+import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
 import { Route as CollectionIndexImport } from './routes/collection/index'
 import { Route as CollectionAddCollectionItemImport } from './routes/collection/addCollectionItem'
@@ -20,6 +22,18 @@ import { Route as AdminCigarsManageImport } from './routes/admin/cigars/manage'
 import { Route as AdminCigarsCigarIdImport } from './routes/admin/cigars/$cigarId'
 
 // Create/Update Routes
+
+const RegisterRoute = RegisterImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -73,6 +87,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
     '/admin/brands': {
@@ -138,6 +166,8 @@ const AdminCigarsRouteWithChildren = AdminCigarsRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/admin/brands': typeof AdminBrandsRoute
   '/admin/cigars': typeof AdminCigarsRouteWithChildren
   '/collection/addCollectionItem': typeof CollectionAddCollectionItemRoute
@@ -148,6 +178,8 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/admin/brands': typeof AdminBrandsRoute
   '/admin/cigars': typeof AdminCigarsRouteWithChildren
   '/collection/addCollectionItem': typeof CollectionAddCollectionItemRoute
@@ -159,6 +191,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
   '/admin/brands': typeof AdminBrandsRoute
   '/admin/cigars': typeof AdminCigarsRouteWithChildren
   '/collection/addCollectionItem': typeof CollectionAddCollectionItemRoute
@@ -171,6 +205,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
+    | '/register'
     | '/admin/brands'
     | '/admin/cigars'
     | '/collection/addCollectionItem'
@@ -180,6 +216,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/login'
+    | '/register'
     | '/admin/brands'
     | '/admin/cigars'
     | '/collection/addCollectionItem'
@@ -189,6 +227,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/login'
+    | '/register'
     | '/admin/brands'
     | '/admin/cigars'
     | '/collection/addCollectionItem'
@@ -200,6 +240,8 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
   AdminBrandsRoute: typeof AdminBrandsRoute
   AdminCigarsRoute: typeof AdminCigarsRouteWithChildren
   CollectionAddCollectionItemRoute: typeof CollectionAddCollectionItemRoute
@@ -208,6 +250,8 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
   AdminBrandsRoute: AdminBrandsRoute,
   AdminCigarsRoute: AdminCigarsRouteWithChildren,
   CollectionAddCollectionItemRoute: CollectionAddCollectionItemRoute,
@@ -225,6 +269,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/login",
+        "/register",
         "/admin/brands",
         "/admin/cigars",
         "/collection/addCollectionItem",
@@ -233,6 +279,12 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/login": {
+      "filePath": "login.tsx"
+    },
+    "/register": {
+      "filePath": "register.tsx"
     },
     "/admin/brands": {
       "filePath": "admin/brands.tsx"

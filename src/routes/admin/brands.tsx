@@ -1,7 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { queryClient } from "@/shared/lib/queryClient"
-import { brandQueryKeys, getBrands } from "@/features/brands"
-import { LoaderData, ManageBrands } from '@/features/brands/ManageBrands'
+import { createFileRoute } from '@tanstack/react-router';
+import { queryClient } from "@/shared/lib/queryClient";
+import { brandQueryKeys, getBrands } from "@/features/brands";
+import { LoaderData, ManageBrands } from '@/features/brands/ManageBrands';
 
 export const Route = createFileRoute('/admin/brands')({
   component: ManageBrands,
@@ -9,7 +9,7 @@ export const Route = createFileRoute('/admin/brands')({
     const brands = await queryClient.ensureQueryData({
       queryKey: brandQueryKeys.brands,
       queryFn: getBrands,
-    })
-    return { brands } as LoaderData
+    });
+    return { brands } as LoaderData;
   },
 });
