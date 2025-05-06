@@ -82,7 +82,7 @@ export function AddBrandDialog({
   // Handle form submission
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (isEditing) {
-      updateMutation.mutate({ ...values, id: brand.id }, {
+      updateMutation.mutate({ ...values }, {
         onSuccess: () => {
           onSuccess();
           form.reset();

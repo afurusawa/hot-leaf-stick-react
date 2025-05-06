@@ -2,7 +2,7 @@ import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from './useAuth';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -34,11 +34,13 @@ export function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h1 className="mb-8 text-4xl tracking-wide text-primary font-[VT323]">HOT LEAF STICK</h1>
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Enter your credentials to access your account</CardDescription>
+          <CardTitle className="text-2xl font-bold font-['Share Tech Mono']">
+            Login
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -74,11 +76,11 @@ export function LoginPage() {
             </Button>
           </form>
           <div className="mt-4 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-300">
               Don't have an account?{' '}
               <button
                 onClick={() => navigate({ to: '/register' })}
-                className="text-blue-600 hover:underline"
+                className="text-blue-300 hover:underline"
               >
                 Register
               </button>

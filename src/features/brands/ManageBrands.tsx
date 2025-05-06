@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import { useLoaderData } from '@tanstack/react-router';
@@ -28,7 +28,7 @@ import {
 import { AddBrandDialog } from "@/features/brands/AddBrandDialog";
 import { brandQueryKeys, getBrands, useBrandsTable } from "@/features/brands";
 
-import type { BrandGetDTO } from "./brand";
+import type { BrandGetDTO } from "./brand.types";
 import { BrandTableMeta } from "./useBrandsTable";
 
 export interface LoaderData {
@@ -92,7 +92,7 @@ const columns: ColumnDef<BrandGetDTO>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row, table }) => {
-      const brand = row.original
+      const brand = row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -117,16 +117,16 @@ const columns: ColumnDef<BrandGetDTO>[] = [
             <DropdownMenuItem>Delete</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      )
+      );
     },
   },
-]
+];
 
 export function ManageBrands() {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [selectedBrand, setSelectedBrand] = useState<BrandGetDTO | undefined>(undefined)
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState<BrandGetDTO | undefined>(undefined);
 
-  const { brands: initialBrands } = useLoaderData({ from: '/admin/brands' }) as LoaderData
+  const { brands: initialBrands } = useLoaderData({ from: '/_sidebar/admin/brands' }) as LoaderData;
   const { data: brands } = useQuery({
     queryKey: brandQueryKeys.brands,
     queryFn: getBrands,
@@ -139,8 +139,8 @@ export function ManageBrands() {
     columns,
     meta: {
       onEditBrand: (brand: BrandGetDTO) => {
-        setSelectedBrand(brand)
-        setIsDialogOpen(true)
+        setSelectedBrand(brand);
+        setIsDialogOpen(true);
       },
     },
   });
@@ -161,13 +161,13 @@ export function ManageBrands() {
           brand={selectedBrand}
           open={isDialogOpen}
           onOpenChange={(open) => {
-            setIsDialogOpen(open)
-            if (!open) setSelectedBrand(undefined)
+            setIsDialogOpen(open);
+            if (!open) setSelectedBrand(undefined);
           }}
           onSuccess={() => {
-            console.log("add brand dialog success")
-            setIsDialogOpen(false)
-            setSelectedBrand(undefined)
+            console.log("add brand dialog success");
+            setIsDialogOpen(false);
+            setSelectedBrand(undefined);
           }}
         />
         <DropdownMenu>
@@ -257,5 +257,5 @@ export function ManageBrands() {
         </div>
       </div>
     </div>
-  )
+  );
 }

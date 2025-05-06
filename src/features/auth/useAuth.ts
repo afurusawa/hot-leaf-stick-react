@@ -27,7 +27,7 @@ export function useAuth() {
       setIsLoading(true);
       setError(null);
       const response = await authApi.login(data);
-      localStorage.setItem('accessToken', response.accessToken);
+      localStorage.setItem('accessToken', response.access_token);
       navigate({ to: '/' });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');

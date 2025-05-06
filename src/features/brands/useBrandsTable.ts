@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -11,8 +11,8 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
-import type { BrandGetDTO } from "./brand"
+} from "@tanstack/react-table";
+import type { BrandGetDTO } from "./brand.types";
 
 // Define custom TableMeta interface for Brand
 export interface BrandTableMeta extends TableMeta<BrandGetDTO> {
@@ -26,10 +26,10 @@ interface UseBrandsTableProps {
 }
 
 export function useBrandsTable({ brands, columns }: UseBrandsTableProps) {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = useState({})
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const table = useReactTable({
     data: brands,
@@ -48,10 +48,10 @@ export function useBrandsTable({ brands, columns }: UseBrandsTableProps) {
       columnVisibility,
       rowSelection,
     }
-  })
+  });
 
   return {
     ...table,
     flexRender,
-  }
+  };
 }

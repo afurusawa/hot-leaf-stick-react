@@ -1,6 +1,5 @@
-import { api } from '@/lib/api';
+import { api, API_URL } from '@/lib/api';
 import { LoginRequest, LoginResponse, RegisterRequest, RegisterResponse } from './auth.types';
-import { API_URL } from '@/shared/config/config';
 
 const PATH_URL = `${API_URL}/auth`;
 

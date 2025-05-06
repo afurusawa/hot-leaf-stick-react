@@ -1,20 +1,24 @@
-import axios from 'axios';
-import { API_URL } from '@/shared/config/config';
-import { CollectionGetDTO, CollectionPayload } from './collectionItem';
+import { api, API_URL } from '@/lib/api';
+import { CollectionGetDTO, CollectionPayload } from './CollectionItem.types';
 
-const PATH_URL = `${API_URL}/collection`;
+const PATH_URL = `${API_URL}/collections`;
 
 export const getCollection = async () => {
-  const response = await axios.get<CollectionGetDTO[]>(`${PATH_URL}`);
+  const response = await api.get<CollectionGetDTO[]>(`${PATH_URL}`);
   return response.data;
 };
 
 export const createCollectionItem = async (item: CollectionPayload) => {
-  const response = await axios.post(`${PATH_URL}`, item);
+  const response = await api.post(`${PATH_URL}`, item);
   return response.data;
 };
 
 export const updateCollectionItem = async (id: string, item: CollectionPayload) => {
-  const response = await axios.patch(`${PATH_URL}/${id}`, item);
+  const response = await api.patch(`${PATH_URL}/${id}`, item);
+  return response.data;
+};
+
+export const deleteCollectionItem = async (id: string) => {
+  const response = await api.delete(`${PATH_URL}/${id}`);
   return response.data;
 };
