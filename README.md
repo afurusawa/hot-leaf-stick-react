@@ -1,54 +1,125 @@
-# React + TypeScript + Vite
+# Hot Leaf Stick
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web application for cigar enthusiasts to manage their collection, track smoking experiences, and discover new cigars.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Frontend
+- React 19 with TypeScript
+- Vite for build tooling
+- TanStack Router for routing
+- TanStack Query for data fetching
+- Shadcn and Radix UI for accessible components
+- Tailwind CSS for styling
+- React Hook Form with Zod for form validation
+- DND Kit for drag-and-drop functionality
+- Recharts for data visualization
 
-## Expanding the ESLint configuration
+### Backend
+- NestJS with Fastify
+- TypeORM with PostgreSQL
+- JWT Authentication
+- Swagger/OpenAPI documentation
+- TypeScript
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Prerequisites
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- Node.js (v18 or higher)
+- PostgreSQL
+- pnpm (recommended) or npm
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Backend Setup
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+1. Navigate to the backend directory:
+   ```bash
+   cd hot-leaf-stick-nestjs
+   ```
+
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+
+3. Set up your environment variables:
+   ```bash
+   cp .env.example .env
+   ```
+   Edit `.env` with your database credentials and other configuration.
+
+4. Run database migrations:
+   ```bash
+   pnpm migration:run
+   ```
+
+5. Start the development server:
+   ```bash
+   pnpm start:dev
+   ```
+
+The backend API will be available at `http://localhost:4000/api`
+
+### Frontend Setup
+
+1. Navigate to the frontend directory:
+   ```bash
+   cd hot-leaf-stick-react
+   ```
+
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+
+3. Start the development server:
+   ```bash
+   pnpm dev
+   ```
+
+The frontend will be available at `http://localhost:5173`
+
+## Development
+
+### Available Scripts
+
+#### Backend
+- `pnpm start:dev` - Start development server
+- `pnpm build` - Build the application
+- `pnpm test` - Run unit tests
+- `pnpm test:e2e` - Run end-to-end tests
+- `pnpm migration:generate` - Generate new migrations
+- `pnpm migration:run` - Run pending migrations
+
+#### Frontend
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm preview` - Preview production build
+- `pnpm lint` - Run ESLint
+
+## API Documentation
+
+Once the backend server is running, you can access the Swagger documentation at:
+`http://localhost:4000/api`
+
+## Features
+
+- User authentication and authorization
+- Cigar collection management
+- Smoking experience tracking
+- Brand and vitola catalog
+- Interactive data visualization
+- Responsive design
+- Dark mode support
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
