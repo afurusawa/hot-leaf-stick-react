@@ -149,7 +149,7 @@ export function ManageCigars() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedCigar, setSelectedCigar] = useState<CigarGetDTO | undefined>(undefined);
 
-  const { cigars: initialCigars, brands } = useLoaderData({ from: '/admin/cigars/manage' }) as LoaderData;
+  const { cigars: initialCigars, brands } = useLoaderData({ from: '/_sidebar/admin/cigars/manage' }) as LoaderData;
   const { data: cigars } = useQuery({
     queryKey: cigarQueryKeys.cigars,
     queryFn: getCigars,

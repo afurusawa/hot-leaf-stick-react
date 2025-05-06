@@ -24,8 +24,7 @@ import { useCreateCollectionItem } from "@/features/collection";
 import { SearchSelect } from "@/features/collection/components/search-select";
 import { DatePickerInput } from "@/features/collection/components/date-picker-input";
 
-import type { BrandGetDTO } from "@/features/brands/brand";
-import type { CollectionItem } from "@/features/collection/collectionItem";
+import type { BrandGetDTO } from "@/features/brands/brand.types";
 
 // Define the form schema with Zod for validation
 const formSchema = z.object({
@@ -58,7 +57,7 @@ interface LoaderData {
   brands: BrandGetDTO[];
 }
 
-export const Route = createFileRoute("/collection/addCollectionItem")({
+export const Route = createFileRoute("/_sidebar/collection/addCollectionItem")({
   component: AddCollectionItem,
   loader: async () => {
     const brands = await queryClient.ensureQueryData({
@@ -70,7 +69,7 @@ export const Route = createFileRoute("/collection/addCollectionItem")({
 });
 
 function AddCollectionItem() {
-  const { brands } = useLoaderData({ from: '/collection/addCollectionItem' }) as LoaderData;
+  const { brands } = useLoaderData({ from: '/_sidebar/collection/addCollectionItem' }) as LoaderData;
 
   // Initialize react-hook-form with Zod resolver
   const form = useForm<CollectionEntryForm>({

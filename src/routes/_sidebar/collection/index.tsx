@@ -14,16 +14,15 @@ import { queryClient } from "@/shared/lib/queryClient";
 import { capitalize, getRelativeDateString } from "@/shared/lib/utils";
 import { brandQueryKeys, getBrands } from "@/features/brands";
 import { collectionQueryKeys, getCollection } from "@/features/collection";
-import type { BrandGetDTO } from "@/features/brands/brand";
-import type { CollectionItem } from "@/features/collection/collectionItem";
-import { CollectionSearchBar } from "@/features/collection/components/search-bar";
+import { CollectionGetDTO } from "@/features/collection/CollectionItem.types";
+import { BrandGetDTO } from "@/features/brands/brand.types";
 
 interface LoaderData {
-  items: CollectionItem[];
+  items: CollectionGetDTO[];
   brands: BrandGetDTO[];
 }
 
-export const Route = createFileRoute("/collection/")({
+export const Route = createFileRoute("/_sidebar/collection/")({
   component: Collection,
   loader: async () => {
     const items = await queryClient.ensureQueryData({
@@ -42,9 +41,9 @@ export const Route = createFileRoute("/collection/")({
 });
 
 function Collection() {
-  const { items, brands } = useLoaderData({ from: '/collection/' }) as LoaderData;
+  const { items, brands } = useLoaderData({ from: '/_sidebar/collection/' }) as LoaderData;
 
-  const renderCard = (item: CollectionItem) => {
+  const renderCard = (item: CollectionGetDTO) => {
 
     const brandName = brands.find((brand) => brand.id === item.brandId)?.name;
 
@@ -52,18 +51,18 @@ function Collection() {
       <Card className="w-[300px] h-[250px] flex flex-col justify-between">
         <CardHeader>
           <CardTitle className="flex items-start justify-between">
-            {capitalize(`${item.cigar?.name || item.custom?.cigarName} ${item.custom?.vitola.name}`)}
+            cigar name
           </CardTitle>
           <CardDescription>
-            {brandName || item.custom?.brandName}
+            brand name
             <Badge variant="outline" className="ml-4">
-              {item.custom?.vitola.length}x{item.custom?.vitola.ring_gauge}
+             vitola
             </Badge>
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p>Qty: {item.quantity}</p>
-          <p>Stored {getRelativeDateString(item.storageDate)}</p>
+          <p>Qty: q</p>
+          <p>Stored {getRelativeDateString(item.storage_date)}</p>
         </CardContent>
         <CardFooter className="flex items-center justify-between w-full">
           <Button variant="outline" size="lg" className="w-full">
@@ -76,7 +75,6 @@ function Collection() {
 
   return (
     <div>
-      <CollectionSearchBar />
       <div className="flex flex-wrap gap-4">
         <Card className="w-[300px] h-[250px] flex flex-col justify-between bg-transparent border-gray-500">
           <CardHeader>
@@ -99,7 +97,7 @@ function Collection() {
           </CardFooter>
         </Card>
 
-        {items.map((item: CollectionItem, index: Key | null | undefined) => (
+        {items.map((item: CollectionGetDTO, index: Key | null | undefined) => (
           <div key={index}>
             {renderCard(item)}
           </div>

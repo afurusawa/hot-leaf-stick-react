@@ -26,8 +26,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/shared/lib/utils";
 
-import type { BrandGetDTO } from "../brands/brand";
-import type { CigarGetDTO, CigarPayload } from "./cigar";
+import type { BrandGetDTO } from "../brands/brand.types";
+import type { CigarGetDTO, CigarCreateDTO } from "./cigar.types";
 import { useCreateCigar, useUpdateCigar } from "./useCigar";
 import { SearchSelect } from "../collection/components/search-select";
 
@@ -99,7 +99,7 @@ export function AddCigarDialog({
       const payload = {
         name: values.name || cigar.name,
         brand_id: values.brand?.id || cigar.brand_id,
-      } as CigarPayload;
+      } as CigarCreateDTO;
 
       updateMutation.mutate(payload, {
         onSuccess: () => {
@@ -116,7 +116,7 @@ export function AddCigarDialog({
       const payload = {
         name: values.name,
         brand_id: values.brand?.id,
-      } as CigarPayload;
+      } as CigarCreateDTO;
 
       addMutation.mutate(payload, {
         onSuccess: () => {

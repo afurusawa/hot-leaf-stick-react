@@ -3,16 +3,15 @@ import { queryClient } from "@/shared/lib/queryClient";
 import { brandQueryKeys, getBrands } from '@/features/brands';
 import { cigarQueryKeys, getCigars } from '@/features/cigars';
 import { ManageCigars } from '@/features/cigars/ManageCigars';
-
-import type { Cigar } from "@/features/cigars/cigar";
-import type { BrandGetDTO } from "@/features/brands/brand";
+import type { CigarGetDTO } from '@/features/cigars/cigar.types';
+import type { BrandGetDTO } from '@/features/brands/brand.types';
 
 interface LoaderData {
-  cigars: Cigar[];
+  cigars: CigarGetDTO[];
   brands: BrandGetDTO[];
 }
 
-export const Route = createFileRoute('/admin/cigars/manage')({
+export const Route = createFileRoute('/_sidebar/admin/cigars/manage')({
   component: ManageCigars,
   loader: async () => {
     const brands = await queryClient.ensureQueryData({

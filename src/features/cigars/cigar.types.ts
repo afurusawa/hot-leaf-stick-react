@@ -6,7 +6,7 @@ export interface CigarResponse {
   name: string;
   brand_id: string;
   brand_name: string;
-  vitolas: Vitola[];
+  vitolas: Vitola[]; // joined
   brand?: BrandGetDTO; // joined
 }
 

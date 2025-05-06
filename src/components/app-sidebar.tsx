@@ -10,6 +10,7 @@ import {
   ShoppingBag,
   Trophy,
 } from "lucide-react";
+import { Link } from '@tanstack/react-router';
 import {
   Sidebar,
   SidebarFooter,
@@ -27,7 +28,7 @@ import {
   CollapsibleTrigger
 } from "@/components/ui/collapsible";
 
-import { NavUser } from "./nav-user"
+import { NavUser } from "./nav-user";
 import { NavSecondary } from "./nav-secondary";
 import { NavMain } from "./nav-main";
 
@@ -42,7 +43,7 @@ const data = {
 
 const navMain = [
   {
-    title: "Dashboard",
+    title: "Dashboard (WIP)",
     url: "/",
     icon: LayoutDashboardIcon,
   },
@@ -60,17 +61,17 @@ const navMain = [
 
 const navCommunity = [
   {
-    title: "Top Rated",
+    title: "Top Rated (WIP)",
     url: "#",
     icon: Trophy,
   },
   {
-    title: "Recommendations",
+    title: "Recommendations (WIP)",
     url: "#",
     icon: Heart,
   },
   {
-    title: "Discover",
+    title: "Discover (WIP)",
     url: "#",
     icon: ShoppingBag,
   },
@@ -120,10 +121,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="/">
-                <Cigarette className="h-5 w-5" />
-                <span className="text-base font-semibold">HOT LEAF STICK</span>
-              </a>
+              <div>
+                <Cigarette className="animate-glow h-8 w-8 mr-2" />
+                <Link to="/">
+                  <span className="font-mono text-2xl tracking-wide">HOT LEAF STICK</span>
+                </Link>
+              </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -135,7 +138,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup>
           <SidebarGroupLabel asChild>
             <CollapsibleTrigger>
-              Community
+              <span className="font-sans uppercase">Community</span>
               <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
             </CollapsibleTrigger>
           </SidebarGroupLabel>
@@ -145,10 +148,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {navCommunity.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <a href={item.url}>
+                      <Link to={item.url}>
                         <item.icon />
-                        <span>{item.title}</span>
-                      </a>
+                        <span className="font-mono text-xl text-md tracking-wide">{item.title}</span>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
@@ -162,7 +165,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarGroup>
           <SidebarGroupLabel asChild>
             <CollapsibleTrigger>
-              Admin
+              <span className="font-sans uppercase tracking-wide">Admin</span>
               <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
             </CollapsibleTrigger>
           </SidebarGroupLabel>
@@ -172,10 +175,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {navAdmin.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <a href={item.url}>
+                      <Link to={item.url}>
                         <item.icon />
-                        <span>{item.title}</span>
-                      </a>
+                        <span className="font-mono text-xl text-md tracking-wide">{item.title}</span>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}

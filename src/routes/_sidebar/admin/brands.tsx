@@ -3,7 +3,7 @@ import { queryClient } from "@/shared/lib/queryClient";
 import { brandQueryKeys, getBrands } from "@/features/brands";
 import { LoaderData, ManageBrands } from '@/features/brands/ManageBrands';
 
-export const Route = createFileRoute('/admin/brands')({
+export const Route = createFileRoute('/_sidebar/admin/brands')({
   component: ManageBrands,
   loader: async () => {
     const brands = await queryClient.ensureQueryData({

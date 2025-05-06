@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/')({
-  component: Index,
+export const Route = createFileRoute('/_sidebar/dashboard/')({
+  component: RouteComponent,
 });
 
-function Index() {
+function RouteComponent() {
   return (
     <div className="p-2">
       <p>This can be a dashboard page</p>
@@ -15,5 +15,5 @@ function Index() {
       <p>top cigars by rating</p>
       <p>top cigars by quantity</p>
     </div>
-  )
+  );
 }
