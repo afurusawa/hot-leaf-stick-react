@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -9,15 +12,35 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { createVitola, updateVitola } from '../vitola.api';
-import { Vitola, CreateVitolaDTO, UpdateVitolaDTO } from '../vitola.types';
+import { CreateVitolaDTO, UpdateVitolaDTO, VitolaResponse } from '../vitola.types';
+
+const formSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  length: z.coerce
+    .number({ invalid_type_error: 'Length must be a number' })
+    .min(0.1, 'Length must be at least 0.1 inches'),
+  ring_gauge: z.coerce
+    .number({ invalid_type_error: 'Ring gauge must be a number' })
+    .int('Ring gauge must be a whole number')
+    .min(1, 'Ring gauge must be at least 1'),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 interface VitolaDialogProps {
   cigarId: string;
   onVitolaAdded: () => void;
-  vitolaToEdit?: Vitola;
+  vitolaToEdit?: VitolaResponse;
   children?: React.ReactNode;
 }
 
@@ -28,15 +51,27 @@ export function VitolaDialog({
   children,
 }: VitolaDialogProps) {
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState(vitolaToEdit?.name || '');
-  const [length, setLength] = useState(vitolaToEdit?.length?.toString() || '');
-  const [ringGauge, setRingGauge] = useState(vitolaToEdit?.ring_gauge?.toString() || '');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: vitolaToEdit?.name || '',
+      length: vitolaToEdit?.length || 0,
+      ring_gauge: vitolaToEdit?.ring_gauge || 0,
+    },
+  });
+
+  const handleClose = () => {
+    setOpen(false);
+    form.reset({
+      name: vitolaToEdit?.name || '',
+      length: vitolaToEdit?.length || 0,
+      ring_gauge: vitolaToEdit?.ring_gauge || 0,
+    });
+  };
+
+  const onSubmit = async (values: FormValues) => {
     setIsLoading(true);
 
     try {
@@ -44,17 +79,13 @@ export function VitolaDialog({
         const updateData: UpdateVitolaDTO = {
           id: vitolaToEdit.id,
           cigar_id: cigarId,
-          name,
-          length: Number(length),
-          ring_gauge: Number(ringGauge),
+          ...values,
         };
         await updateVitola(vitolaToEdit.id, updateData);
       } else {
         const createData: CreateVitolaDTO = {
           cigar_id: cigarId,
-          name,
-          length: Number(length),
-          ring_gauge: Number(ringGauge),
+          ...values,
         };
         await createVitola(createData);
       }
@@ -62,14 +93,19 @@ export function VitolaDialog({
       setOpen(false);
       onVitolaAdded();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      form.setError('root', {
+        message: err instanceof Error ? err.message : 'An error occurred while saving the vitola',
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(newOpen) => {
+      setOpen(newOpen);
+      if (!newOpen) handleClose();
+    }}>
       <DialogTrigger asChild>
         {children || (
           <Button variant="outline" size="sm">
@@ -86,50 +122,79 @@ export function VitolaDialog({
               : 'Add a new vitola to this cigar.'}
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="e.g., Robusto"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="length">Length (inches)</Label>
-              <Input
-                id="length"
-                type="number"
-                value={length}
-                onChange={(e) => setLength(e.target.value)}
-                placeholder="e.g., 5"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="ringGauge">Ring Gauge</Label>
-              <Input
-                id="ringGauge"
-                type="number"
-                value={ringGauge}
-                onChange={(e) => setRingGauge(e.target.value)}
-                placeholder="e.g., 50"
-                required
-              />
-            </div>
-            {error && (
-              <div className="text-sm text-red-500">{error}</div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="e.g., Robusto"
+                      autoComplete="off"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="length"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Length (inches)</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="number"
+                      min="0.1"
+                      step="0.01"
+                      placeholder="e.g., 5.5"
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      value={field.value || ''}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="ring_gauge"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Ring Gauge</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="number"
+                      min="1"
+                      step="1"
+                      placeholder="e.g., 50"
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      value={field.value || ''}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {form.formState.errors.root && (
+              <div className="text-sm text-red-500 font-medium">
+                {form.formState.errors.root.message}
+              </div>
             )}
-          </div>
-          <DialogFooter>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Saving...' : vitolaToEdit ? 'Update' : 'Add'}
-            </Button>
-          </DialogFooter>
-        </form>
+            <DialogFooter>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? 'Saving...' : vitolaToEdit ? 'Update' : 'Add'}
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

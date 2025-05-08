@@ -1,10 +1,17 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createVitola, updateVitola, deleteVitola } from './vitola.api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { createVitola, updateVitola, deleteVitola, getVitolas } from './vitola.api';
 import { UpdateVitolaDTO } from './vitola.types';
 
 export const vitolaQueryKeys = {
-  all: ['vitolas'] as const,
-  byCigarId: (cigarId: string) => [...vitolaQueryKeys.all, 'byCigarId', cigarId] as const,
+  vitolas: ['vitolas'] as const,
+  byVitolaId: (vitolaId: string) => [...vitolaQueryKeys.vitolas, 'byVitolaId', vitolaId] as const,
+};
+
+export const useGetVitolas = () => {
+  return useQuery({
+    queryKey: vitolaQueryKeys.vitolas,
+    queryFn: getVitolas,
+  });
 };
 
 export const useCreateVitola = () => {
@@ -13,7 +20,7 @@ export const useCreateVitola = () => {
   return useMutation({
     mutationFn: createVitola,
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: vitolaQueryKeys.byCigarId(data.cigar_id) });
+      queryClient.invalidateQueries({ queryKey: vitolaQueryKeys.byVitolaId(data.id) });
     },
   });
 };
@@ -24,7 +31,7 @@ export const useUpdateVitola = () => {
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: UpdateVitolaDTO }) => updateVitola(id, data),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: vitolaQueryKeys.byCigarId(data.cigar_id) });
+      queryClient.invalidateQueries({ queryKey: vitolaQueryKeys.byVitolaId(data.id) });
     },
   });
 };
@@ -34,8 +41,8 @@ export const useDeleteVitola = () => {
 
   return useMutation({
     mutationFn: deleteVitola,
-    onSuccess: (_, cigarId) => {
-      queryClient.invalidateQueries({ queryKey: vitolaQueryKeys.byCigarId(cigarId) });
+    onSuccess: (_, vitolaId) => {
+      queryClient.invalidateQueries({ queryKey: vitolaQueryKeys.byVitolaId(vitolaId) });
     },
   });
 }; 

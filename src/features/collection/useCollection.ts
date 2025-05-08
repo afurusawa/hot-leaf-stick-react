@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from "@/shared/lib/queryClient";
-import { createCollectionItem, getCollection, updateCollectionItem } from './collection.api';
+import { createCollectionItem, getCollection, updateCollectionItem, deleteCollectionItem } from './collection.api';
 import { CollectionPayload } from './CollectionItem.types';
 
 
@@ -27,6 +27,15 @@ export const useCreateCollectionItem = () => {
 export const useUpdateCollectionItem = (id: string) => {
   return useMutation({
     mutationFn: (item: CollectionPayload) => updateCollectionItem(id, item),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: collectionQueryKeys.all });
+    },
+  });
+};
+
+export const useDeleteCollectionItem = () => {
+  return useMutation({
+    mutationFn: deleteCollectionItem,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: collectionQueryKeys.all });
     },

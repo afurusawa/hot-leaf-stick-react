@@ -3,6 +3,11 @@ import { CreateVitolaDTO, UpdateVitolaDTO, VitolaResponse } from './vitola.types
 
 const PATH_URL = `${API_URL}/vitolas`;
 
+export async function getVitolas(): Promise<VitolaResponse[]> {
+  const response = await api.get<VitolaResponse[]>(`${PATH_URL}`);
+  return response.data;
+}
+
 export async function createVitola(data: CreateVitolaDTO): Promise<VitolaResponse> {
   const response = await api.post<VitolaResponse>(`${PATH_URL}`, data);
   return response.data;

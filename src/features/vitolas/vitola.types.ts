@@ -1,11 +1,3 @@
-export interface Vitola {
-  id: string;
-  name: string;
-  length: number;
-  ring_gauge: number;
-  cigar_id: string;
-}
-
 export interface CreateVitolaDTO {
   cigar_id: string;
   name: string;

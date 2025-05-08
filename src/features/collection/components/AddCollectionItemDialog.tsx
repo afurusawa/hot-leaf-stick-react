@@ -27,7 +27,7 @@ import { DatePickerInput } from "./date-picker-input";
 import { useCreateCollectionItem } from "../useCollection";
 import type { BrandGetDTO } from "@/features/brands/brand.types";
 import type { CigarGetDTO } from "@/features/cigars/cigar.types";
-import type { Vitola } from "@/features/vitolas/vitola.types";
+import type { VitolaResponse } from "@/features/vitolas/vitola.types";
 
 // Form schema using zod
 const formSchema = z.object({
@@ -59,7 +59,7 @@ const formSchema = z.object({
 interface AddCollectionItemDialogProps {
   brands: BrandGetDTO[];
   cigars: CigarGetDTO[];
-  vitolas: Vitola[];
+  vitolas: VitolaResponse[];
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   onSuccess: () => void;

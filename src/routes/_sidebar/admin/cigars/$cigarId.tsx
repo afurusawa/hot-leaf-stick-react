@@ -8,7 +8,7 @@ import { PencilIcon } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { VitolaDialog } from '@/features/vitolas';
 import { Button } from "@/components/ui/button";
-import type { Vitola } from '@/features/vitolas/vitola.types';
+import type { VitolaResponse } from '@/features/vitolas/vitola.types';
 
 interface LoaderData {
   cigar: CigarGetDTO;
@@ -35,9 +35,9 @@ function CigarDetails() {
     staleTime: 0,
   });
 
-  const renderCard = (vitola: Vitola) => {
+  const renderCard = (vitola: VitolaResponse) => {
     return (
-      <Card className="@container/card hover:shadow-lg transition-shadow duration-200">
+      <Card key={vitola.id} className="@container/card hover:shadow-lg transition-shadow duration-200">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-2 flex-wrap pr-8">
