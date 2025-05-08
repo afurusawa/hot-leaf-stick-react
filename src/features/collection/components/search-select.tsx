@@ -45,6 +45,7 @@ export function SearchSelect<T extends { id: string }>({
   placeholder = "Enter label",
   className,
   disabled,
+  editable = false,
 }: SearchSelectProps<T>) {
   const [open, setOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -97,7 +98,7 @@ export function SearchSelect<T extends { id: string }>({
                       setSearchQuery(value);
                     }}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") {
+                      if (editable && e.key === "Enter") {
                         e.preventDefault();
                         if (searchQuery) {
                           // Optionally handle free-text input

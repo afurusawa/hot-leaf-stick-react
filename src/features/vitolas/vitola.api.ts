@@ -8,6 +8,11 @@ export async function getVitolas(): Promise<VitolaResponse[]> {
   return response.data;
 }
 
+export async function getVitolasByCigar(cigarId: string): Promise<VitolaResponse[]> {
+  const response = await api.get<VitolaResponse[]>(`${PATH_URL}/by-cigar/${cigarId}`);
+  return response.data;
+}
+
 export async function createVitola(data: CreateVitolaDTO): Promise<VitolaResponse> {
   const response = await api.post<VitolaResponse>(`${PATH_URL}`, data);
   return response.data;

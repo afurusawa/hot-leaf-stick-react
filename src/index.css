@@ -148,13 +148,63 @@
   --sidebar-ring: oklch(0.646 0.222 41.116);
 }
 
+/* Base styles for better readability and UX */
 @layer base {
+
   * {
     @apply border-border outline-ring/50;
   }
 
+
+  html {
+    font-size: 16px;
+    /* Base font size */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 1.125rem;
+    /* Slightly larger than default for better readability */
+    line-height: var(--line-height-relaxed);
+    /* color: var(--color-foreground); */
+    /* background-color: var(--color-background); */
+  }
+
+  /* Responsive typography */
+  @media (min-width: 768px) {
+    html {
+      font-size: 18px;
+      /* Larger base size on bigger screens */
+    }
+  }
+
+  /* Improved focus styles for accessibility */
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+
+  /* Better spacing for content readability */
+  p {
+    margin-bottom: 1.5rem;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    line-height: var(--line-height-tight);
   }
 }
 

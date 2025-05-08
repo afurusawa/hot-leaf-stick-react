@@ -1,8 +1,8 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export function capitalize(str: string): string {
@@ -21,13 +21,13 @@ export function getRelativeDateString(dateString: string) {
   const months = Math.floor(days / 30);
   const years = Math.floor(days / 365);
 
-  if (years > 0) return `${years} year${years > 1 ? 's' : ''}`;
-  if (months > 0) return `${months} month${months > 1 ? 's' : ''}`;
-  if (weeks > 0) return `${weeks} week${weeks > 1 ? 's' : ''}`;
-  if (days > 0) return `${days} day${days > 1 ? 's' : ''}`;
-  if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''}`;
-  if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''}`;
-  if (seconds > 0) return `${seconds} second${seconds > 1 ? 's' : ''}`;
+  if (years > 0) return `${years} yr${years > 1 ? 's' : ''}`;
+  if (months > 0) return `${months} mo${months > 1 ? 's' : ''}`;
+  if (weeks > 0) return `${weeks} wk${weeks > 1 ? 's' : ''}`;
+  if (days > 0) return `${days} d${days > 1 ? '' : ''}`;
+  if (hours > 0) return `${hours} hr${hours > 1 ? 's' : ''}`;
+  if (minutes > 0) return `${minutes} min${minutes > 1 ? 's' : ''}`;
+  if (seconds > 0) return `${seconds} sec${seconds > 1 ? 's' : ''}`;
   return 'just now';
 }
 

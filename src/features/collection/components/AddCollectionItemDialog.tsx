@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -26,8 +27,9 @@ import { SearchSelect } from "./search-select";
 import { DatePickerInput } from "./date-picker-input";
 import { useCreateCollectionItem } from "../useCollection";
 import type { BrandGetDTO } from "@/features/brands/brand.types";
-import type { CigarGetDTO } from "@/features/cigars/cigar.types";
-import type { VitolaResponse } from "@/features/vitolas/vitola.types";
+import { useQuery } from "@tanstack/react-query";
+import { getCigarsByBrand } from "@/features/cigars/cigar.api";
+import { getVitolasByCigar } from "@/features/vitolas/vitola.api";
 
 // Form schema using zod
 const formSchema = z.object({
@@ -58,8 +60,6 @@ const formSchema = z.object({
 
 interface AddCollectionItemDialogProps {
   brands: BrandGetDTO[];
-  cigars: CigarGetDTO[];
-  vitolas: VitolaResponse[];
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   onSuccess: () => void;
@@ -67,8 +67,6 @@ interface AddCollectionItemDialogProps {
 
 export function AddCollectionItemDialog({
   brands,
-  cigars,
-  vitolas,
   open = false,
   onOpenChange,
   onSuccess
@@ -86,6 +84,36 @@ export function AddCollectionItemDialog({
       storageDate: new Date(),
     },
   });
+
+  // Watch brand selection to filter cigars
+  const selectedBrand = form.watch("brand");
+  const selectedCigar = form.watch("cigar");
+  
+  // Fetch cigars when brand is selected
+  const { data: brandCigars, isLoading: isLoadingCigars } = useQuery({
+    queryKey: ['cigars', selectedBrand?.id],
+    queryFn: () => selectedBrand?.id ? getCigarsByBrand(selectedBrand.id) : Promise.resolve([]),
+    enabled: !!selectedBrand?.id,
+  });
+
+  // Fetch vitolas when cigar is selected
+  const { data: cigarVitolas, isLoading: isLoadingVitolas } = useQuery({
+    queryKey: ['vitolas', selectedCigar?.id],
+    queryFn: () => selectedCigar?.id ? getVitolasByCigar(selectedCigar.id) : Promise.resolve([]),
+    enabled: !!selectedCigar?.id,
+  });
+
+  // Memoize filtered cigars to prevent unnecessary recalculations
+  const filteredCigars = useMemo(() => {
+    if (!selectedBrand?.id) return [];
+    return brandCigars || [];
+  }, [brandCigars, selectedBrand]);
+
+  // Memoize filtered vitolas based on selected cigar
+  const filteredVitolas = useMemo(() => {
+    if (!selectedCigar?.id) return [];
+    return cigarVitolas || [];
+  }, [cigarVitolas, selectedCigar]);
 
   // Handle form submission
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -142,9 +170,10 @@ export function AddCollectionItemDialog({
               control={form.control}
               name="cigar"
               displayField="name"
-              items={cigars}
+              items={filteredCigars}
               label="Cigar"
-              placeholder="Select or enter cigar"
+              placeholder={selectedBrand ? (isLoadingCigars ? "Loading cigars..." : "Select or enter cigar") : "Select a brand first"}
+              disabled={!selectedBrand || isLoadingCigars}
             />
 
             {/* Vitola Selection */}
@@ -152,9 +181,10 @@ export function AddCollectionItemDialog({
               control={form.control}
               name="vitola"
               displayField="name"
-              items={vitolas}
+              items={filteredVitolas}
               label="Vitola"
-              placeholder="Select or enter vitola"
+              placeholder={selectedCigar ? (isLoadingVitolas ? "Loading vitolas..." : "Select or enter vitola") : "Select a cigar first"}
+              disabled={!selectedCigar || isLoadingVitolas}
             />
 
             {/* Quantity */}

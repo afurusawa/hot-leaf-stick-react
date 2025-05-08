@@ -18,6 +18,11 @@ export const getCigarByName = async (name: string) => {
   return response.data;
 };
 
+export const getCigarsByBrand = async (brandId: string) => {
+  const response = await api.get<CigarGetDTO[]>(`${PATH_URL}/by-brand/${brandId}`);
+  return response.data;
+};
+
 export const createCigar = async (cigar: CigarCreateDTO) => {
   const response = await api.post(`${PATH_URL}`, cigar);
   return response.data;

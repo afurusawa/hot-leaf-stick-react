@@ -1,6 +1,5 @@
 import { Key, useState } from "react";
-import { createFileRoute, useLoaderData, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
+import { createFileRoute, useLoaderData } from "@tanstack/react-router";
 import {
   Card,
   CardContent,
@@ -17,16 +16,10 @@ import { collectionQueryKeys, getCollection, useQueryCollection } from "@/featur
 import { CollectionGetDTO } from "@/features/collection/CollectionItem.types";
 import { BrandGetDTO } from "@/features/brands/brand.types";
 import { AddCollectionItemDialog } from "@/features/collection/components/AddCollectionItemDialog";
-import { cigarQueryKeys, getCigars } from "@/features/cigars";
-import { getVitolas, vitolaQueryKeys } from "@/features/vitolas";
-import type { CigarGetDTO } from "@/features/cigars/cigar.types";
-import type { VitolaResponse } from "@/features/vitolas/vitola.types";
 
 interface LoaderData {
   items: CollectionGetDTO[];
   brands: BrandGetDTO[];
-  cigars: CigarGetDTO[];
-  vitolas: VitolaResponse[];
 }
 
 export const Route = createFileRoute("/_sidebar/collection/")({
@@ -42,44 +35,55 @@ export const Route = createFileRoute("/_sidebar/collection/")({
       queryFn: getBrands,
     });
 
-    const cigars = await queryClient.ensureQueryData({
-      queryKey: cigarQueryKeys.cigars,
-      queryFn: getCigars,
-    });
-
-    const vitolas = await queryClient.ensureQueryData({
-      queryKey: vitolaQueryKeys.vitolas,
-      queryFn: getVitolas,
-    });
-
-    return { items, brands, cigars, vitolas };
+    return { items, brands };
   }
 });
 
 function Collection() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { data: items = [] } = useQueryCollection();
-  const { brands, cigars, vitolas } = useLoaderData({ from: '/_sidebar/collection/' }) as LoaderData;
+  const { brands } = useLoaderData({ from: '/_sidebar/collection/' }) as LoaderData;
 
   const renderCard = (item: CollectionGetDTO) => {
     return (
-      <Card className="w-[300px] h-[250px] flex flex-col justify-between">
+      <Card className="w-[325px] h-[275px] flex flex-col justify-between gap-0">
         <CardHeader>
-          <CardTitle className="flex items-start justify-between">
-            {item.cigar?.name || "Unknown Cigar"} {item.vitola?.name}
-          </CardTitle>
-          <CardDescription>
-            {item.cigar?.brand?.name || "Unknown Brand"}
-            <Badge variant="outline" className="ml-4">
-             {item.vitola?.length} x {item.vitola?.ring_gauge}
-            </Badge>
+          <CardDescription className="flex items-center justify-between">
+            <span className="font-[VT323] font-normal text-lg">
+              {item.cigar?.brand?.name || "Unknown Brand"}
+            </span>
+            <Badge variant="outline" className="border-gray-500 font-[Sen] ml-2">
+                {item.vitola?.length} x {item.vitola?.ring_gauge}
+            </Badge>  
           </CardDescription>
+          <CardTitle className="flex flex-wrap items-center gap-2">
+            <p className="my-2 font-[VT323] font-normal text-primary text-2xl/5">
+              {item.cigar?.name || "Unknown Cigar"} {item.vitola?.name}
+            </p>
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <p>Qty: {item.quantity}</p>
-          <p>Stored for {getRelativeDateString(item.storage_date)}</p>
+          <p className="my-2 font-[Sen] text-white text-xs">
+            black pepper, leather, earth, baking spices
+          </p>
         </CardContent>
-        <CardFooter className="flex items-center justify-between w-full">
+        <CardFooter>
+          <div className="grid grid-cols-3 gap-2 w-full">
+            <div className="flex flex-col items-center">
+              <span className="font-[VT323] text-sm text-gray-500 uppercase">quantity</span>
+              <span className="font-[VT323] font-normal text-2xl">{item.quantity}</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="font-[VT323] text-sm text-gray-500 uppercase">rating</span>
+              <span className="font-[VT323] font-normal text-2xl">{'N/A'}</span>
+            </div>
+            <div className="flex flex-col items-center">
+              <span className="font-[VT323] text-sm text-gray-500 uppercase">stored for</span>
+              <span className="font-[VT323] font-normal text-2xl">
+                {getRelativeDateString(item.storage_date)}
+                </span>
+            </div>
+          </div>
         </CardFooter>
       </Card>
     );
@@ -88,23 +92,22 @@ function Collection() {
   return (
     <div>
       <div className="flex flex-wrap gap-4">
-        <Card className="w-[300px] h-[250px] flex flex-col justify-between bg-transparent border-gray-500">
+        <Card className="w-[325px] h-[275px] flex flex-col justify-between bg-transparent border-gray-500">
           <CardHeader>
             <CardTitle>
-              Add Cigars
+              <span className="font-[VT323] font-normal text-xl">
+                Add Cigars
+              </span>
             </CardTitle>
             <CardDescription>
               Add new cigars to your collection
             </CardDescription>
           </CardHeader>
           <CardContent className="flex items-center justify-center">
-            {/* <Plus className="w-16 h-16 opacity-50" /> */}
           </CardContent>
           <CardFooter className="flex items-end justify-between">
               <AddCollectionItemDialog
                 brands={brands}
-                cigars={cigars}
-                vitolas={vitolas}
                 open={isDialogOpen}
                 onOpenChange={(open) => {
                   setIsDialogOpen(open);
