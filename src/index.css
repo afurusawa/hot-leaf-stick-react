@@ -38,9 +38,9 @@
   --font-size-3xl: 1.875rem;
   --font-size-4xl: 2.25rem;
   --font-size-5xl: 3rem;
-  --line-height-base: 1.5;
-  --line-height-relaxed: 1.625;
-  --line-height-tight: 1.25;
+  --line-height-base: 1.25;
+  --line-height-relaxed: 1.5;
+  --line-height-tight: 1.0;
   --letter-spacing-tight: -0.025em;
   --letter-spacing-normal: 0;
   --letter-spacing-wide: 0.025em;

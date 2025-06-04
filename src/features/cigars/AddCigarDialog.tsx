@@ -159,6 +159,7 @@ export function AddCigarDialog({
                       <Input
                         id="cigar-name"
                         placeholder="Cigar name"
+                        autoComplete="off"
                         className={cn(
                           "text-sm",
                           error && "border-destructive focus-visible:ring-destructive"

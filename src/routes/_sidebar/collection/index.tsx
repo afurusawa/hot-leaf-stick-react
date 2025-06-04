@@ -16,6 +16,10 @@ import { collectionQueryKeys, getCollection, useQueryCollection } from "@/featur
 import { CollectionGetDTO } from "@/features/collection/CollectionItem.types";
 import { BrandGetDTO } from "@/features/brands/brand.types";
 import { AddCollectionItemDialog } from "@/features/collection/components/AddCollectionItemDialog";
+import { Input } from "@/components/ui/input";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { ChevronDown } from "lucide-react";
 
 interface LoaderData {
   items: CollectionGetDTO[];
@@ -91,6 +95,36 @@ function Collection() {
 
   return (
     <div>
+      <div className="flex items-center py-4 gap-4">
+        <Input
+          placeholder="Filter by cigar..."
+          disabled
+          className="max-w-sm"
+        />
+        <Button disabled>Add Cigar</Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Columns <ChevronDown />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {/* {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  className="capitalize"
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                >
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              ))} */}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <div className="flex flex-wrap gap-4">
         <Card className="w-[325px] h-[275px] flex flex-col justify-between bg-transparent border-gray-500">
           <CardHeader>

@@ -19,7 +19,7 @@ export async function createVitola(data: CreateVitolaDTO): Promise<VitolaRespons
 }
 
 export async function updateVitola(id: string, data: UpdateVitolaDTO): Promise<VitolaResponse> {
-  const response = await api.put<VitolaResponse>(`${PATH_URL}/${id}`, data);
+  const response = await api.patch<VitolaResponse>(`${PATH_URL}/${id}`, data);
   return response.data;
 }
 
