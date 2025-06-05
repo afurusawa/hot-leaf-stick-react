@@ -12,7 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import type { CigarGetDTO } from "./cigar";
+import type { CigarGetDTO } from "./cigar.types";
 
 // Define custom TableMeta interface for Brand
 export interface CigarTableMeta extends TableMeta<CigarGetDTO> {

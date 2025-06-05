@@ -18,7 +18,6 @@ import { Route as SidebarImport } from './routes/_sidebar'
 import { Route as SidebarIndexImport } from './routes/_sidebar/index'
 import { Route as SidebarDashboardIndexImport } from './routes/_sidebar/dashboard/index'
 import { Route as SidebarCollectionIndexImport } from './routes/_sidebar/collection/index'
-import { Route as SidebarCollectionAddCollectionItemImport } from './routes/_sidebar/collection/addCollectionItem'
 import { Route as SidebarAdminCigarsImport } from './routes/_sidebar/admin/cigars'
 import { Route as SidebarAdminBrandsImport } from './routes/_sidebar/admin/brands'
 import { Route as SidebarAdminCigarsManageImport } from './routes/_sidebar/admin/cigars/manage'
@@ -66,13 +65,6 @@ const SidebarCollectionIndexRoute = SidebarCollectionIndexImport.update({
   path: '/collection/',
   getParentRoute: () => SidebarRoute,
 } as any)
-
-const SidebarCollectionAddCollectionItemRoute =
-  SidebarCollectionAddCollectionItemImport.update({
-    id: '/collection/addCollectionItem',
-    path: '/collection/addCollectionItem',
-    getParentRoute: () => SidebarRoute,
-  } as any)
 
 const SidebarAdminCigarsRoute = SidebarAdminCigarsImport.update({
   id: '/admin/cigars',
@@ -151,13 +143,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SidebarAdminCigarsImport
       parentRoute: typeof SidebarImport
     }
-    '/_sidebar/collection/addCollectionItem': {
-      id: '/_sidebar/collection/addCollectionItem'
-      path: '/collection/addCollectionItem'
-      fullPath: '/collection/addCollectionItem'
-      preLoaderRoute: typeof SidebarCollectionAddCollectionItemImport
-      parentRoute: typeof SidebarImport
-    }
     '/_sidebar/collection/': {
       id: '/_sidebar/collection/'
       path: '/collection'
@@ -208,7 +193,6 @@ interface SidebarRouteChildren {
   SidebarIndexRoute: typeof SidebarIndexRoute
   SidebarAdminBrandsRoute: typeof SidebarAdminBrandsRoute
   SidebarAdminCigarsRoute: typeof SidebarAdminCigarsRouteWithChildren
-  SidebarCollectionAddCollectionItemRoute: typeof SidebarCollectionAddCollectionItemRoute
   SidebarCollectionIndexRoute: typeof SidebarCollectionIndexRoute
   SidebarDashboardIndexRoute: typeof SidebarDashboardIndexRoute
 }
@@ -217,8 +201,6 @@ const SidebarRouteChildren: SidebarRouteChildren = {
   SidebarIndexRoute: SidebarIndexRoute,
   SidebarAdminBrandsRoute: SidebarAdminBrandsRoute,
   SidebarAdminCigarsRoute: SidebarAdminCigarsRouteWithChildren,
-  SidebarCollectionAddCollectionItemRoute:
-    SidebarCollectionAddCollectionItemRoute,
   SidebarCollectionIndexRoute: SidebarCollectionIndexRoute,
   SidebarDashboardIndexRoute: SidebarDashboardIndexRoute,
 }
@@ -234,7 +216,6 @@ export interface FileRoutesByFullPath {
   '/': typeof SidebarIndexRoute
   '/admin/brands': typeof SidebarAdminBrandsRoute
   '/admin/cigars': typeof SidebarAdminCigarsRouteWithChildren
-  '/collection/addCollectionItem': typeof SidebarCollectionAddCollectionItemRoute
   '/collection': typeof SidebarCollectionIndexRoute
   '/dashboard': typeof SidebarDashboardIndexRoute
   '/admin/cigars/$cigarId': typeof SidebarAdminCigarsCigarIdRoute
@@ -248,7 +229,6 @@ export interface FileRoutesByTo {
   '/': typeof SidebarIndexRoute
   '/admin/brands': typeof SidebarAdminBrandsRoute
   '/admin/cigars': typeof SidebarAdminCigarsRouteWithChildren
-  '/collection/addCollectionItem': typeof SidebarCollectionAddCollectionItemRoute
   '/collection': typeof SidebarCollectionIndexRoute
   '/dashboard': typeof SidebarDashboardIndexRoute
   '/admin/cigars/$cigarId': typeof SidebarAdminCigarsCigarIdRoute
@@ -264,7 +244,6 @@ export interface FileRoutesById {
   '/_sidebar/': typeof SidebarIndexRoute
   '/_sidebar/admin/brands': typeof SidebarAdminBrandsRoute
   '/_sidebar/admin/cigars': typeof SidebarAdminCigarsRouteWithChildren
-  '/_sidebar/collection/addCollectionItem': typeof SidebarCollectionAddCollectionItemRoute
   '/_sidebar/collection/': typeof SidebarCollectionIndexRoute
   '/_sidebar/dashboard/': typeof SidebarDashboardIndexRoute
   '/_sidebar/admin/cigars/$cigarId': typeof SidebarAdminCigarsCigarIdRoute
@@ -281,7 +260,6 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/brands'
     | '/admin/cigars'
-    | '/collection/addCollectionItem'
     | '/collection'
     | '/dashboard'
     | '/admin/cigars/$cigarId'
@@ -294,7 +272,6 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/brands'
     | '/admin/cigars'
-    | '/collection/addCollectionItem'
     | '/collection'
     | '/dashboard'
     | '/admin/cigars/$cigarId'
@@ -308,7 +285,6 @@ export interface FileRouteTypes {
     | '/_sidebar/'
     | '/_sidebar/admin/brands'
     | '/_sidebar/admin/cigars'
-    | '/_sidebar/collection/addCollectionItem'
     | '/_sidebar/collection/'
     | '/_sidebar/dashboard/'
     | '/_sidebar/admin/cigars/$cigarId'
@@ -352,7 +328,6 @@ export const routeTree = rootRoute
         "/_sidebar/",
         "/_sidebar/admin/brands",
         "/_sidebar/admin/cigars",
-        "/_sidebar/collection/addCollectionItem",
         "/_sidebar/collection/",
         "/_sidebar/dashboard/"
       ]
@@ -381,10 +356,6 @@ export const routeTree = rootRoute
         "/_sidebar/admin/cigars/$cigarId",
         "/_sidebar/admin/cigars/manage"
       ]
-    },
-    "/_sidebar/collection/addCollectionItem": {
-      "filePath": "_sidebar/collection/addCollectionItem.tsx",
-      "parent": "/_sidebar"
     },
     "/_sidebar/collection/": {
       "filePath": "_sidebar/collection/index.tsx",

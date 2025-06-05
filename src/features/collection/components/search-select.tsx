@@ -34,6 +34,7 @@ interface SearchSelectProps<T extends { id: string }> {
   placeholder?: string; // Placeholder text
   className?: string; // For custom styling
   disabled?: boolean; // Disable the field
+  editable?: boolean; // Allow free-text input
 }
 
 export function SearchSelect<T extends { id: string }>({
